@@ -1,1 +1,1 @@
-This is a sample app from Mapsted demonstrating using our sdks. A Mapsted license file is required in order to run the sample app. If you do not have a license, please contact https://mapsted.com/contact-us to get the license first.
+This sample app from Mapsted demonstrates how to use our SDKs. A Mapsted licence file is required in order to run the sample application. Please visit https://mpasted.com/contact-us to download the licence file
