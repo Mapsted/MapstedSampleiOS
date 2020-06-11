@@ -12,8 +12,8 @@
 		C047C89F228B1A8B00E376D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C047C89D228B1A8B00E376D0 /* Main.storyboard */; };
 		C047C8A1228B1A8D00E376D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C047C8A0228B1A8D00E376D0 /* Assets.xcassets */; };
 		C047C8A4228B1A8D00E376D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C047C8A2228B1A8D00E376D0 /* LaunchScreen.storyboard */; };
-		E11917DE246DA6FD0051770C /* mapsted.zip in Resources */ = {isa = PBXBuildFile; fileRef = E11917DD246DA6FD0051770C /* mapsted.zip */; };
 		E169A73D232A8CE900BF41AB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169A73C232A8CE900BF41AB /* MainViewController.swift */; };
+		E18B92F82492BDC5009A98FE /* mapstyle.zip in Resources */ = {isa = PBXBuildFile; fileRef = E18B92F72492BDC5009A98FE /* mapstyle.zip */; };
 		E1AD45AA23832C9700CA981A /* HelveticaLTStd-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1AD45A823832C9700CA981A /* HelveticaLTStd-Bold.otf */; };
 		E1AD45AB23832C9700CA981A /* HelveticaLTStd-Roman.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1AD45A923832C9700CA981A /* HelveticaLTStd-Roman.otf */; };
 /* End PBXBuildFile section */
@@ -43,8 +43,8 @@
 		C047C8A3228B1A8D00E376D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C047C8A5228B1A8D00E376D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D736188C0313D1955C446D5D /* Pods-Sample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sample/Pods-Sample.debug.xcconfig"; sourceTree = "<group>"; };
-		E11917DD246DA6FD0051770C /* mapsted.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = mapsted.zip; sourceTree = "<group>"; };
 		E169A73C232A8CE900BF41AB /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		E18B92F72492BDC5009A98FE /* mapstyle.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = mapstyle.zip; sourceTree = "<group>"; };
 		E1AD45A823832C9700CA981A /* HelveticaLTStd-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "HelveticaLTStd-Bold.otf"; sourceTree = "<group>"; };
 		E1AD45A923832C9700CA981A /* HelveticaLTStd-Roman.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "HelveticaLTStd-Roman.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -115,7 +115,7 @@
 		E10C3B75234523AC00FF60B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E11917DD246DA6FD0051770C /* mapsted.zip */,
+				E18B92F72492BDC5009A98FE /* mapstyle.zip */,
 				E1AD45A723832C9700CA981A /* Fonts */,
 			);
 			path = Resources;
@@ -204,9 +204,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E11917DE246DA6FD0051770C /* mapsted.zip in Resources */,
 				C047C8A4228B1A8D00E376D0 /* LaunchScreen.storyboard in Resources */,
 				E1AD45AB23832C9700CA981A /* HelveticaLTStd-Roman.otf in Resources */,
+				E18B92F82492BDC5009A98FE /* mapstyle.zip in Resources */,
 				C047C8A1228B1A8D00E376D0 /* Assets.xcassets in Resources */,
 				C047C89F228B1A8B00E376D0 /* Main.storyboard in Resources */,
 				E1AD45AA23832C9700CA981A /* HelveticaLTStd-Bold.otf in Resources */,

@@ -28,7 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MNSettingUtils.shared.debugStageEnvironment = false
         MNSettingUtils.setVLog(false)
         MNSettingUtils.setWtfAbort(false)
-        MNMapApi.shared.setUp(prefetchProperties: false) {}
+        MNMapApi.shared.setBaseMapStyle(style: .DARK)
+        MNMapApi.shared.setUp(prefetchProperties: false)
         return true
     }
 

@@ -11,7 +11,7 @@ import positioning
 import mapuikit
 import map
 
-#error(" A Mapsted license file is required in order to run the sample app. If you do not have a license, please contact https://mapsted.com/contact-us to get the license first.")
+//#error(" A Mapsted license file is required in order to run the sample app. If you do not have a license, please contact https://mapsted.com/contact-us to get the license first.")
 
 class MainViewController : UIViewController {
     
