@@ -24,10 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.backgroundColor = .clear
         
-        MNSettingUtils.shared.debugTestEnvironment = false
-        MNSettingUtils.shared.debugStageEnvironment = false
-        MNSettingUtils.setVLog(false)
-        MNSettingUtils.setWtfAbort(false)
+        MNMapApi.shared.setBaseMapStyle(style: .DARK)
         MNMapApi.shared.setUp(prefetchProperties: false)
         return true
     }
