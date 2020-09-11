@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '11.0'
+platform :ios, '12.0'
 
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/Mapsted/podspec'
@@ -9,8 +9,8 @@ target 'Sample' do
   use_frameworks!
 
   # Pods for Sample
-  pod 'mapsted-sdk-positioning', '3.7.1'
-  pod 'mapsted-sdk-map', '3.7.1'
-  pod 'mapsted-sdk-map-ui', '3.7.1'
-  pod 'mapsted-sdk-core-map'
+  pod 'mapsted-sdk-core', '4.0.1'
+  pod 'mapsted-sdk-map', '4.0.1'
+  pod 'mapsted-sdk-map-ui', '4.0.1'
+  pod 'mapsted-sdk-core-map', '4.3.1'
 end
