@@ -7,16 +7,16 @@
 //
 
 import UIKit
-import positioning
-import mapuikit
-import map
+import MapstedCore
+import MapstedMap
+import MapstedMapUi
 
 #error(" A Mapsted license file is required in order to run the sample app. If you do not have a license, please contact https://mapsted.com/contact-us to get the license first.")
 
 class MainViewController : UIViewController {
     
     private var containerVC: ContainerViewController?
-    private var mapsVC: MNMapUIKitViewController?
+    private var mapsVC: MapstedMapUiViewController?
     
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var infoLabel: UILabel!
@@ -59,7 +59,7 @@ class MainViewController : UIViewController {
     
     func addMapView() {
         if mapsVC == nil {
-            if let mapsVC = MNMapUIKitViewController.shared as? MNMapUIKitViewController {
+            if let mapsVC = MapstedMapUiViewController.shared as? MapstedMapUiViewController {
                 self.mapsVC = mapsVC
                 containerVC?.addController(controller: mapsVC, yOffset: 0, isNew: false)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
@@ -87,7 +87,7 @@ class MainViewController : UIViewController {
         if ( result == true ) {
             print("Initialize Succeded!")
             DispatchQueue.main.async {
-                let propertyInfos = MNPositioningApi.shared.propertyInfos()
+                let propertyInfos = MapstedCoreApi.shared.propertyInfos()
                 if propertyInfos.count > 0 {
                     self.mapsVC?.selectAndDrawProperty(propertyId: propertyInfos[0].propertyId(), callback: {[weak self] status in
                         DispatchQueue.main.async {

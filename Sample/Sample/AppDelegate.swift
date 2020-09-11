@@ -7,8 +7,10 @@
 //
 
 import UIKit
-import positioning
-import map
+
+import MapstedCore
+import MapstedMap
+
 @UIApplicationMain
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,8 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.backgroundColor = .clear
         
-        MNMapApi.shared.setBaseMapStyle(style: .DARK)
-        MNMapApi.shared.setUp(prefetchProperties: false)
+        MapstedMapApi.shared.setBaseMapStyle(style: .DARK)
+        MapstedMapApi.shared.setUp(prefetchProperties: false)
         return true
     }
 
