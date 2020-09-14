@@ -12,5 +12,5 @@ target 'Sample' do
   pod 'mapsted-sdk-core', '4.0.1'
   pod 'mapsted-sdk-map', '4.0.1'
   pod 'mapsted-sdk-map-ui', '4.0.1'
-  pod 'mapsted-sdk-core-map',
+  pod 'mapsted-sdk-core-map'
 end
