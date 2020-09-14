@@ -85,7 +85,7 @@ class MainViewController : UIViewController {
     @objc func initialized(notification: NSNotification) {
         let result = notification.userInfo?["result"] as? Bool
         if ( result == true ) {
-            print("Initialize Succeded!")
+            print("Initialize Succeeded!")
             DispatchQueue.main.async {
                 let propertyInfos = MapstedCoreApi.shared.propertyInfos()
                 if propertyInfos.count > 0 {
