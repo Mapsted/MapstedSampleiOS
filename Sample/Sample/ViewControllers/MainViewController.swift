@@ -71,7 +71,6 @@ class MainViewController : UIViewController {
     
     func displayProperty(propertyInfo: MNPropertyInfo) {
         //zoom to property
-        mapsVC?.zoomTo(location: propertyInfo.centroid(), zoomLevel: 18)
         mapsVC?.selectAndDrawProperty(propertyId: propertyInfo.propertyId(), callback: {status in
             DispatchQueue.main.async {
                 self.spinnerView.stopAnimating()
