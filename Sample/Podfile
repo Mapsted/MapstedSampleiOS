@@ -9,7 +9,7 @@ target 'Sample' do
   use_frameworks!
 
   # Pods for Sample
-  #pod 'mapsted-sdk-core', '4.1.0'
-  #pod 'mapsted-sdk-map', '4.1.0'
-  pod 'mapsted-sdk-map-ui', '4.1.0'
+  #pod 'mapsted-sdk-core'
+  #pod 'mapsted-sdk-map'
+  pod 'mapsted-sdk-map-ui' 
 end
