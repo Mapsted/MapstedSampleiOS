@@ -71,11 +71,15 @@ class MainViewController : UIViewController {
     
     func displayProperty(propertyInfo: MNPropertyInfo) {
         //zoom to property
+        mapsVC?.showLoadingSpinner(text: "Loading...")
+        MapstedMapApi.shared.removeProperty(propertyId: propertyInfo.propertyId())
         mapsVC?.selectAndDrawProperty(propertyId: propertyInfo.propertyId(), callback: {status in
             DispatchQueue.main.async {
-                self.spinnerView.stopAnimating()
                 if status {
-                    self.mapsVC?.displayPropertyOnMap()
+                    DispatchQueue.main.async {
+                        self.mapsVC?.hideLoadingSpinner()
+                        self.mapsVC?.displayPropertyOnMap()
+                    }
                 }
             }
         })
