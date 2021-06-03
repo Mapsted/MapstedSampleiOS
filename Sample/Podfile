@@ -13,3 +13,26 @@ target 'Sample' do
   #pod 'mapsted-sdk-map'
   pod 'mapsted-sdk-map-ui' 
 end
+
+post_install do |installer|
+  
+  # Remove the static libraries from OTHER_LDFLAGS
+  frameworkNames = ['MapSDK']
+  
+  installer.aggregate_targets.each do |pod_target|
+    pod_target.xcconfigs.each do |config_name, config_file|
+      frameworkNames.each do |name|
+        config_file.frameworks.delete(name)
+      end
+      xcconfig_path = pod_target.xcconfig_path(config_name)
+      config_file.save_as(xcconfig_path)
+    end
+  end
+  
+  # Remove the 'IPHONEOS_DEPLOYMENT_TARGET'
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+    end
+  end
+end
