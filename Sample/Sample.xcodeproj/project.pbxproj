@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65A8FFE326F183F900B21A69 /* ios_licence.key in Resources */ = {isa = PBXBuildFile; fileRef = 65A8FFE226F183F900B21A69 /* ios_licence.key */; };
 		89B7AF81AEA9BFBBD8207539 /* Pods_Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20DEAB4167BAE9CF34ED1C22 /* Pods_Sample.framework */; };
 		C047C89A228B1A8B00E376D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C047C899228B1A8B00E376D0 /* AppDelegate.swift */; };
 		C047C89F228B1A8B00E376D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C047C89D228B1A8B00E376D0 /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 /* Begin PBXFileReference section */
 		20DEAB4167BAE9CF34ED1C22 /* Pods_Sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E38E8B9A71DE8A16034B26D /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
+		65A8FFE226F183F900B21A69 /* ios_licence.key */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ios_licence.key; sourceTree = "<group>"; };
 		9F09C4536FD2A08DBB4EB5FD /* Pods-Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sample/Pods-Sample.release.xcconfig"; sourceTree = "<group>"; };
 		A97C55730D4AA0A4462D48E6 /* Pods-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Demo/Pods-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		C047C896228B1A8B00E376D0 /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +117,7 @@
 		E10C3B75234523AC00FF60B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				65A8FFE226F183F900B21A69 /* ios_licence.key */,
 				E18B92F72492BDC5009A98FE /* mapstyle.zip */,
 				E1AD45A723832C9700CA981A /* Fonts */,
 			);
@@ -210,6 +213,7 @@
 				C047C8A1228B1A8D00E376D0 /* Assets.xcassets in Resources */,
 				C047C89F228B1A8B00E376D0 /* Main.storyboard in Resources */,
 				E1AD45AA23832C9700CA981A /* HelveticaLTStd-Bold.otf in Resources */,
+				65A8FFE326F183F900B21A69 /* ios_licence.key in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
