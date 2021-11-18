@@ -16,9 +16,6 @@ class MainViewController : UIViewController {
     private var containerVC: ContainerViewController?
     private var mapsVC: MapstedMapUiViewController?
     
-    @IBOutlet weak var closeBtn: UIButton!
-    @IBOutlet weak var infoLabel: UILabel!
-    @IBOutlet weak var labelHtConstraint: NSLayoutConstraint!
     @IBOutlet weak var spinnerView: UIActivityIndicatorView!
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,27 +29,16 @@ class MainViewController : UIViewController {
         
         spinnerView.startAnimating()
         addMapView()
-        closeBtn.layer.cornerRadius = 12
-        closeBtn.layer.masksToBounds = true
         
         MNCoreNotificationManager.main.addObserver(type: .initialized, observer: self, selector: #selector(self.initialized(notification:)))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        labelHtConstraint.constant = 0
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        if let bannerText = mapsVC?.connectWifiBluetoothBannerText() {
-            infoLabel.text = bannerText
-            UIView.animate(withDuration: 0.2) {
-                self.labelHtConstraint.constant = 48
-                self.view.layoutIfNeeded()
-            }
-        }
     }
     
     func addMapView() {
@@ -60,9 +46,6 @@ class MainViewController : UIViewController {
             if let mapsVC = MapstedMapUiViewController.shared as? MapstedMapUiViewController {
                 self.mapsVC = mapsVC
                 containerVC?.addController(controller: mapsVC, yOffset: 0, isNew: false)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                    self.mapsVC?.zoomTo(level: 2)
-                }
             }
         }
     }
