@@ -10,4 +10,4 @@ This iOS sample app from Mapsted demonstrates how to use our SDKs.
 
 3. Open <b>Sample.xcworkspace</b> in Xcode.
 
-4. Delete error statement in project that prompts for Mapsted license. Now you are ready to run the project!
+4. Now you are ready to run the project!
