@@ -13,6 +13,10 @@ target 'Sample' do
   #pod 'mapsted-sdk-map'
   pod 'mapsted-sdk-map-ui' 
 end
+target 'Sample_MapOnly' do
+	
+	pod 'mapsted-sdk-map'
+end
 
 post_install do |installer|
   
