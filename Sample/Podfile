@@ -4,17 +4,15 @@ platform :ios, '12.3'
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/Mapsted/podspec.git'
 
+use_frameworks!
 target 'Sample' do
   # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
-
   # Pods for Sample
   #pod 'mapsted-sdk-core'
   #pod 'mapsted-sdk-map'
   pod 'mapsted-sdk-map-ui' 
 end
 target 'Sample_MapOnly' do
-	
 	pod 'mapsted-sdk-map'
 end
 
