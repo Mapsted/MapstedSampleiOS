@@ -44,6 +44,7 @@ class MainViewController : UIViewController {
     func addMapView() {
         if mapsVC == nil {
             if let mapsVC = MapstedMapUiViewController.shared as? MapstedMapUiViewController {
+                mapsVC.setAlertDelegate(alertDelegate: self)
                 self.mapsVC = mapsVC
                 containerVC?.addController(controller: mapsVC, yOffset: 0, isNew: false)
             }
@@ -87,5 +88,14 @@ class MainViewController : UIViewController {
         } else {
             print("Initialize Failed!")
         }
+    }
+}
+
+extension MainViewController : MNAlertDelegate {
+    func showAlerts() {
+    }
+    
+    func loadingAlerts() -> Bool {
+        return false
     }
 }
