@@ -30,7 +30,7 @@ class MainViewController : UIViewController {
         spinnerView.startAnimating()
         addMapView()
         
-        MNCoreNotificationManager.main.addObserver(type: .initialized, observer: self, selector: #selector(self.initialized(notification:)))
+		MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,18 +44,18 @@ class MainViewController : UIViewController {
     func addMapView() {
         if mapsVC == nil {
             if let mapsVC = MapstedMapUiViewController.shared as? MapstedMapUiViewController {
-                mapsVC.setAlertDelegate(alertDelegate: self)
                 self.mapsVC = mapsVC
                 containerVC?.addController(controller: mapsVC, yOffset: 0, isNew: false)
             }
         }
     }
     
-    func displayProperty(propertyInfo: MNPropertyInfo) {
+    func displayProperty(propertyInfo: PropertyInfo) {
         //zoom to property
         mapsVC?.showLoadingSpinner(text: "Loading...")
-        MapstedMapApi.shared.removeProperty(propertyId: propertyInfo.propertyId())
-        mapsVC?.selectAndDrawProperty(propertyId: propertyInfo.propertyId(), callback: {status in
+		let propertyId = propertyInfo.getPropertyId()
+        MapstedMapApi.shared.removeProperty(propertyId: propertyId)
+        mapsVC?.selectAndDrawProperty(propertyId: propertyId, callback: {status in
             DispatchQueue.main.async {
                 if status {
                     DispatchQueue.main.async {
@@ -67,35 +67,38 @@ class MainViewController : UIViewController {
         })
     }
     
-    @objc func initialized(notification: NSNotification) {
-        let result = notification.userInfo?["result"] as? Bool
-        if ( result == true ) {
-            print("Initialize Succeeded!")
-            DispatchQueue.main.async {
-                let propertyInfos = MapstedCoreApi.shared.propertyInfos()
-                if propertyInfos.count > 0 {
-                    self.mapsVC?.selectAndDrawProperty(propertyId: propertyInfos[0].propertyId(), callback: {[weak self] status in
-                        DispatchQueue.main.async {
-                            self?.spinnerView.stopAnimating()
-                            if status {
-                                self?.displayProperty(propertyInfo: propertyInfos[0])
-                            }
-                        }
-                        
-                    })
-                }
-            }
-        } else {
-            print("Initialize Failed!")
-        }
+	fileprivate func handleSuccess() {
+		DispatchQueue.main.async {
+			let propertyInfos = CoreApi.PropertyManager.getAll()
+			print(("##DT Found \(propertyInfos.count) properties"))
+			if propertyInfos.count > 0 {
+				let firstProperty = propertyInfos[0]
+				self.mapsVC?.selectAndDrawProperty(propertyId: firstProperty.getPropertyId(), callback: {[weak self] status in
+					DispatchQueue.main.async {
+						self?.spinnerView.stopAnimating()
+						if status {
+							self?.displayProperty(propertyInfo: firstProperty)
+						}
+					}
+					
+				})
+			}
+		}
+	}
+	
+}
+
+extension MainViewController : CoreInitCallback {
+    func onSuccess() {
+        self.handleSuccess()
+    }
+    
+    func onFailure(errorCode: Int, errorMessage: String) {
+        print("Failed with \(errorCode) - \(errorMessage)")
+    }
+    
+    func onStatusMessage(messageType: StatusMessageType) {
+        
     }
 }
 
-extension MainViewController : MNAlertDelegate {
-    func showAlerts() {
-    }
-    
-    func loadingAlerts() -> Bool {
-        return false
-    }
-}

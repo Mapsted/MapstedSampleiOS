@@ -25,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         pageControl.pageIndicatorTintColor = UIColor.lightGray
         pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.backgroundColor = .clear
+		
         
-        MapstedMapApi.shared.setUp(prefetchProperties: false)
         return true
     }
 

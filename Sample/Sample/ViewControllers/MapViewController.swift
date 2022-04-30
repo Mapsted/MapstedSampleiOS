@@ -23,10 +23,10 @@ class MapViewController : UIViewController {
 		
 			//Do some UI stuff
 		setupUI()
+		MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
 		
-			//Subscribe to notifications
-		MNCoreNotificationManager.main.addObserver(type: .initialized, observer: self, selector: #selector(self.initialized(notification:)))
 	}
+	
 	
 		//Start progress indicator
 	func showSpinner() {
@@ -58,49 +58,34 @@ class MapViewController : UIViewController {
 	
 	
 		//Handler for initialization notification
-	@objc func initialized(notification: NSNotification) {
-		let result = notification.userInfo?["result"] as? Bool
-		if ( result == true ) {
-			print("Initialize Succeeded!")
-			
-				//Some property within the licence
-			let propertyId = 504
-			
-				//Start progress animation
-			showSpinner()
-			
-				//Download Property data
-			MapstedCoreApi.shared.downloadPropertyData(propertyId: propertyId,
-													   progress: { p in
-				print("Downloaded \(p * 100)%")
-				
-			}, completed: { success in
-				if success {
-						//if successful, draw property
-					self.drawProperty(propertyId: propertyId)
-				}
-				else {
-					print("Failed")
-				}
-			})
-		} else {
-			print("Initialize Failed!")
-		}
+	fileprivate func handleSuccess() {
+		print("Initialize Succeeded!")
+		
+			//Some property within the licence
+		let propertyId = 504
+		
+			//Start progress animation
+		showSpinner()
+		
+		CoreApi.PropertyManager.startDownload(propertyId: propertyId, propertyDownloadListener: self)
+		
 	}
+	
+	
 	
 		//Helper method to draw property.
 	func drawProperty(propertyId: Int) {
 		print("Drawing")
 		
-		guard let propertyData = MapstedCoreApi.shared.propertyData(propertyId: propertyId) else {
+		guard let propertyData = CoreApi.PropertyManager.getCached(propertyId: propertyId) else {
 			print("No property Data")
 			self.hideSpinner()
 			return
 		}
 		DispatchQueue.main.async {
 			MapstedMapApi.shared.drawProperty(isSelected: true, propertyData: propertyData)
-			if let propertyInfo = MNPropertyInfo(propertyId: propertyData.propertyId()) {
-				MapstedMapApi.shared.mapView()?.moveToLocation(mercator: propertyInfo.centroid(), zoom: 18, duration: 0.2)
+			if let propertyInfo = PropertyInfo(propertyId: propertyId) {
+				MapstedMapApi.shared.mapView()?.moveToLocation(mercator: propertyInfo.getCentroid(), zoom: 18, duration: 0.2)
 			}
 			self.hideSpinner()
 			
@@ -130,4 +115,42 @@ extension MapViewController {
 		superview.addConstraints(horizontalLayout)
 		superview.addConstraints(verticalLayout)
 	}
+}
+extension MapViewController : CoreInitCallback {
+    func onSuccess() {
+        self.handleSuccess()
+    }
+    
+    func onFailure(errorCode: Int, errorMessage: String) {
+        print("Failed to initialize with error: \(errorCode) - \(errorMessage)")
+    }
+    
+    func onStatusMessage(messageType: StatusMessageType) {
+        //Handle message
+    }
+}
+
+extension MapViewController : PropertyDownloadListener {
+	func onSuccess(propertyId: Int) {
+		self.drawProperty(propertyId: propertyId)
+	}
+	
+	func onSuccess(propertyId: Int, buildingId: Int) {
+		print("Successfully downloaded \(propertyId) - \(buildingId)")
+	}
+	
+	func onFailureWithProperty(propertyId: Int) {
+		print("Failed to download \(propertyId)")
+	}
+	
+	func onFailureWithBuilding(propertyId: Int, buildingId: Int) {
+		print("Failed to download \(propertyId) - \(buildingId)")
+	}
+	
+	func onProgress(propertyId: Int, percentage: Float) {
+		print("Downloaded \(percentage * 100)% of \(propertyId)")
+	}
+	
+	
+	
 }
