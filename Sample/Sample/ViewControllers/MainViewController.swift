@@ -53,38 +53,37 @@ class MainViewController : UIViewController {
     
     func displayProperty(propertyInfo: PropertyInfo) {
         //zoom to property
-        mapsVC?.showLoadingSpinner(text: "Loading...")
+        DispatchQueue.main.async {
+            self.mapsVC?.showLoadingSpinner(text: "Loading...")
+        }
+        
 		let propertyId = propertyInfo.getPropertyId()
-        MapstedMapApi.shared.removeProperty(propertyId: propertyId)
-        mapsVC?.selectAndDrawProperty(propertyId: propertyId, callback: {status in
+        mapsVC?.selectAndDrawProperty(propertyId: propertyId, callback: {[weak self] status in
             DispatchQueue.main.async {
+                self?.spinnerView.stopAnimating()
+                self?.mapsVC?.hideLoadingSpinner()
                 if status {
-                    DispatchQueue.main.async {
-                        self.mapsVC?.hideLoadingSpinner()
-                        self.mapsVC?.displayPropertyOnMap()
-                    }
+                    self?.mapsVC?.displayPropertyOnMap()
+                }
+                else {
+                    print("Problem with status on select and draw")
                 }
             }
         })
     }
     
 	fileprivate func handleSuccess() {
-		DispatchQueue.main.async {
-			let propertyInfos = CoreApi.PropertyManager.getAll()
-			print(("##DT Found \(propertyInfos.count) properties"))
-			if propertyInfos.count > 0 {
-				let firstProperty = propertyInfos[0]
-				self.mapsVC?.selectAndDrawProperty(propertyId: firstProperty.getPropertyId(), callback: {[weak self] status in
-					DispatchQueue.main.async {
-						self?.spinnerView.stopAnimating()
-						if status {
-							self?.displayProperty(propertyInfo: firstProperty)
-						}
-					}
-					
-				})
-			}
-		}
+        
+        let propertyInfos = CoreApi.PropertyManager.getAll()
+        if propertyInfos.count > 0 {
+            let firstProperty = propertyInfos[0]
+            self.displayProperty(propertyInfo: firstProperty)
+        }
+        else {
+            print("No properties found")
+        }
+        
+    
 	}
 	
 }
