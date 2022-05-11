@@ -18,6 +18,8 @@ class MainViewController : UIViewController {
     
     @IBOutlet weak var spinnerView: UIActivityIndicatorView!
     
+    //MARK: -
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let containerVC = segue.destination as? ContainerViewController, segue.identifier == "containerSegue" {
             self.containerVC = containerVC
@@ -28,7 +30,7 @@ class MainViewController : UIViewController {
         super.viewDidLoad()
         
         spinnerView.startAnimating()
-        addMapView()
+        //addMapView()
         
 		MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
     }
@@ -41,6 +43,8 @@ class MainViewController : UIViewController {
         super.viewDidAppear(animated)
     }
     
+    //MARK: - Intialize and add MapView and display property
+    
     func addMapView() {
         if mapsVC == nil {
             if let mapsVC = MapstedMapUiViewController.shared as? MapstedMapUiViewController {
@@ -49,18 +53,20 @@ class MainViewController : UIViewController {
                 containerVC?.addController(controller: mapsVC, yOffset: 0, isNew: false)
             }
         }
+        
+        self.handleSuccess()
     }
     
     func displayProperty(propertyInfo: PropertyInfo) {
         //zoom to property
         DispatchQueue.main.async {
             self.mapsVC?.showLoadingSpinner(text: "Loading...")
+            self.spinnerView.stopAnimating()
         }
         
 		let propertyId = propertyInfo.getPropertyId()
         mapsVC?.selectAndDrawProperty(propertyId: propertyId, callback: {[weak self] status in
             DispatchQueue.main.async {
-                self?.spinnerView.stopAnimating()
                 self?.mapsVC?.hideLoadingSpinner()
                 if status {
                     self?.mapsVC?.displayPropertyOnMap()
@@ -73,7 +79,6 @@ class MainViewController : UIViewController {
     }
     
 	fileprivate func handleSuccess() {
-        
         let propertyInfos = CoreApi.PropertyManager.getAll()
         if propertyInfos.count > 0 {
             let firstProperty = propertyInfos[0]
@@ -82,15 +87,15 @@ class MainViewController : UIViewController {
         else {
             print("No properties found")
         }
-        
-    
 	}
-	
 }
 
 extension MainViewController : CoreInitCallback {
     func onSuccess() {
-        self.handleSuccess()
+        //Once the Map API Setup is complete, Setup the Mapview
+        DispatchQueue.main.async {
+            self.addMapView()
+        }
     }
     
     func onFailure(errorCode: Int, errorMessage: String) {

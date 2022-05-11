@@ -17,23 +17,22 @@ class MapViewController : UIViewController {
 	
 		//View controller in charge of map view
 	private let mapViewController = MNMapViewController()
+    
+    //MARK: -
 	
 	public override func viewDidLoad() {
 		super.viewDidLoad()
-		
-			//Do some UI stuff
-		setupUI()
+        showSpinner()
 		MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
-		
 	}
 	
+    //MARK: - Show & Hide Spinner
 	
 		//Start progress indicator
 	func showSpinner() {
 		DispatchQueue.main.async {
 			self.spinnerView?.startAnimating()
 		}
-		
 	}
 	
 		//Stop progress indicator
@@ -42,6 +41,8 @@ class MapViewController : UIViewController {
 			self.spinnerView?.stopAnimating()
 		}
 	}
+    
+    //MARK: - Setup UI
 	
 		//Method to do UI setup
 	func setupUI() {
@@ -54,28 +55,26 @@ class MapViewController : UIViewController {
 		mapPlaceholderView.addSubview(mapViewController.view)
 		addParentsConstraints(view: mapViewController.view)
 		mapViewController.didMove(toParent: self)
+        
+        //Added handleSuccess once MapView is ready to avoid any plotting issues.
+        self.handleSuccess()
 	}
 	
-	
+    //MARK: - Download Property and Draw Property on Success
 		//Handler for initialization notification
 	fileprivate func handleSuccess() {
-		print("Initialize Succeeded!")
-		
 			//Some property within the licence
 		let propertyId = 504
 		
 			//Start progress animation
-		showSpinner()
+		
 		
 		CoreApi.PropertyManager.startDownload(propertyId: propertyId, propertyDownloadListener: self)
 		
 	}
 	
-	
-	
 		//Helper method to draw property.
 	func drawProperty(propertyId: Int) {
-		print("Drawing")
 		
 		guard let propertyData = CoreApi.PropertyManager.getCached(propertyId: propertyId) else {
 			print("No property Data")
@@ -88,12 +87,8 @@ class MapViewController : UIViewController {
 				MapstedMapApi.shared.mapView()?.moveToLocation(mercator: propertyInfo.getCentroid(), zoom: 18, duration: 0.2)
 			}
 			self.hideSpinner()
-			
 		}
-		
-		
 	}
-	
 }
 
 extension MapViewController {
@@ -116,9 +111,13 @@ extension MapViewController {
 		superview.addConstraints(verticalLayout)
 	}
 }
+
 extension MapViewController : CoreInitCallback {
     func onSuccess() {
-        self.handleSuccess()
+        //Once the Map API Setup is complete, Setup the Mapview
+        DispatchQueue.main.async {
+            self.setupUI()
+        }
     }
     
     func onFailure(errorCode: Int, errorMessage: String) {
