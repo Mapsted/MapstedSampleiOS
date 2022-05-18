@@ -3,14 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		122C894FFF2835C9691F64E1 /* Pods_Sample_MapOnly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA71761D2DAD6CC6EBF8034B /* Pods_Sample_MapOnly.framework */; };
-		653DEE802832E570006404E3 /* MapstedMapUi in Frameworks */ = {isa = PBXBuildFile; productRef = 653DEE7F2832E570006404E3 /* MapstedMapUi */; };
-		658F82712833437B003A342F /* MapstedMap in Frameworks */ = {isa = PBXBuildFile; productRef = 658F82702833437B003A342F /* MapstedMap */; };
-		658F82732833440D003A342F /* MapstedMap in Frameworks */ = {isa = PBXBuildFile; productRef = 658F82722833440D003A342F /* MapstedMap */; };
 		65A8FFE326F183F900B21A69 /* ios_licence.key in Resources */ = {isa = PBXBuildFile; fileRef = 65A8FFE226F183F900B21A69 /* ios_licence.key */; };
 		65AD19B42763E9A6002CDAB1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C047C899228B1A8B00E376D0 /* AppDelegate.swift */; };
 		65AD19B92763E9A6002CDAB1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C047C8A2228B1A8D00E376D0 /* LaunchScreen.storyboard */; };
@@ -84,7 +81,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				658F82732833440D003A342F /* MapstedMap in Frameworks */,
 				122C894FFF2835C9691F64E1 /* Pods_Sample_MapOnly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,8 +89,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				653DEE802832E570006404E3 /* MapstedMapUi in Frameworks */,
-				658F82712833437B003A342F /* MapstedMap in Frameworks */,
 				CC6F848823DF2894806363CC /* Pods_Sample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -205,15 +199,13 @@
 				65AD19B62763E9A6002CDAB1 /* Frameworks */,
 				65AD19B82763E9A6002CDAB1 /* Resources */,
 				65AD19C02763E9A6002CDAB1 /* Embed Frameworks */,
+				90F52CADEE04A2D9A8D36ACC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Sample_MapOnly;
-			packageProductDependencies = (
-				658F82722833440D003A342F /* MapstedMap */,
-			);
 			productName = Demo;
 			productReference = 65AD19C52763E9A6002CDAB1 /* Sample_MapOnly.app */;
 			productType = "com.apple.product-type.application";
@@ -227,16 +219,13 @@
 				C047C893228B1A8B00E376D0 /* Frameworks */,
 				C047C894228B1A8B00E376D0 /* Resources */,
 				C047C8D0228B1F7A00E376D0 /* Embed Frameworks */,
+				FC81B70ACE1C9DFE7D2C2B28 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Sample;
-			packageProductDependencies = (
-				653DEE7F2832E570006404E3 /* MapstedMapUi */,
-				658F82702833437B003A342F /* MapstedMap */,
-			);
 			productName = Demo;
 			productReference = C047C896228B1A8B00E376D0 /* Sample.app */;
 			productType = "com.apple.product-type.application";
@@ -270,10 +259,6 @@
 				Base,
 			);
 			mainGroup = C047C88D228B1A8B00E376D0;
-			packageReferences = (
-				653DEE7E2832E570006404E3 /* XCRemoteSwiftPackageReference "mapsted-sdk-map-ui-spm" */,
-				658F826F2833437B003A342F /* XCRemoteSwiftPackageReference "mapsted-sdk-map-spm" */,
-			);
 			productRefGroup = C047C897228B1A8B00E376D0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -338,6 +323,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		90F52CADEE04A2D9A8D36ACC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sample_MapOnly/Pods-Sample_MapOnly-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sample_MapOnly/Pods-Sample_MapOnly-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sample_MapOnly/Pods-Sample_MapOnly-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		97B9A82E29DEA73F6B711486 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -358,6 +360,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FC81B70ACE1C9DFE7D2C2B28 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sample/Pods-Sample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sample/Pods-Sample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sample/Pods-Sample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -652,43 +671,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		653DEE7E2832E570006404E3 /* XCRemoteSwiftPackageReference "mapsted-sdk-map-ui-spm" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Mapsted/mapsted-sdk-map-ui-spm";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.6.2;
-			};
-		};
-		658F826F2833437B003A342F /* XCRemoteSwiftPackageReference "mapsted-sdk-map-spm" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Mapsted/mapsted-sdk-map-spm";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.6.2;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		653DEE7F2832E570006404E3 /* MapstedMapUi */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 653DEE7E2832E570006404E3 /* XCRemoteSwiftPackageReference "mapsted-sdk-map-ui-spm" */;
-			productName = MapstedMapUi;
-		};
-		658F82702833437B003A342F /* MapstedMap */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 658F826F2833437B003A342F /* XCRemoteSwiftPackageReference "mapsted-sdk-map-spm" */;
-			productName = MapstedMap;
-		};
-		658F82722833440D003A342F /* MapstedMap */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 658F826F2833437B003A342F /* XCRemoteSwiftPackageReference "mapsted-sdk-map-spm" */;
-			productName = MapstedMap;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C047C88E228B1A8B00E376D0 /* Project object */;
 }
