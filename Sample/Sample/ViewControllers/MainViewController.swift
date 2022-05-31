@@ -70,6 +70,9 @@ class MainViewController : UIViewController {
                 self?.mapsVC?.hideLoadingSpinner()
                 if status {
                     self?.mapsVC?.displayPropertyOnMap()
+                    
+                    //Example how to select and deselect
+                    self?.selectEntities()
                 }
                 else {
                     print("Problem with status on select and draw")
@@ -88,6 +91,19 @@ class MainViewController : UIViewController {
             print("No properties found")
         }
 	}
+    fileprivate func selectEntities() {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "Apple", propertyId: 504)
+        if let firstMatch = entities.first {
+            print("Selecting ... \(firstMatch.entityId) = \(firstMatch.displayName)")
+            MapstedMapApi.shared.selectEntity(entity: firstMatch)
+        }
+        /*
+        DispatchQueue.main.asyncAfter(deadline: .now() + 20.0) {
+            print("Deselecting ....")
+            MapstedMapApi.shared.deselectEntity()
+        }
+         */
+    }
 }
 
 extension MainViewController : CoreInitCallback {
