@@ -73,6 +73,9 @@ class MainViewController : UIViewController {
                     
                     //Example how to select and deselect
                     self?.selectEntities()
+                    
+                    //Example how to make route requests
+                    //self?.makeRouteRequests()
                 }
                 else {
                     print("Problem with status on select and draw")
@@ -104,6 +107,57 @@ class MainViewController : UIViewController {
         }
          */
     }
+    fileprivate func makeRouteRequests() {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "Appl", propertyId: 504)
+        let otherEntities = CoreApi.PropertyManager.getSearchEntities(propertyId: 504)
+        if let firstMatch = entities.first,
+            let randomDestination1 = otherEntities.randomElement(),
+            let randomDestination2 = otherEntities.randomElement(){
+            
+            
+            self.makeRouteRequest(start: firstMatch,
+                                  fromCurrentLocation: false,
+                                  destinations: [randomDestination1, randomDestination2])
+            
+        }
+        
+        
+    }
+    
+    fileprivate func makeRouteRequest(start: ISearchable?, fromCurrentLocation: Bool, destinations: [ISearchable]) {
+        let optimizedRoute = true
+        let useStairs = false
+        let useEscalators = true
+        let useElevators = true
+        
+        let routeOptions = MNRouteOptions(useStairs,
+                                          escalators: useEscalators,
+                                          elevators: useElevators,
+                                          current: fromCurrentLocation,
+                                          optimized: optimizedRoute)
+        
+        let start = start as? MNSearchEntity
+        let pois = destinations.compactMap({$0 as? MNSearchEntity})
+        
+                
+            //Build a route request
+        var routeRequest: MNRouteRequest?
+        routeRequest = MNRouteRequest(routeOptions: routeOptions,
+                                      destinations:pois,
+                                      startEntity: fromCurrentLocation ? nil : start)
+        
+        
+        if let routeRequest = routeRequest {
+            
+                //@Daniel: Let's put this in async queue
+            DispatchQueue.global(qos: .userInteractive).async {
+                CoreApi.RoutingManager.requestRoute(request: routeRequest, routingRequestCallback: self)
+            }
+            
+        }
+        
+        
+    }
 }
 
 extension MainViewController : CoreInitCallback {
@@ -121,6 +175,18 @@ extension MainViewController : CoreInitCallback {
     func onStatusMessage(messageType: StatusMessageType) {
         
     }
+}
+
+extension MainViewController: RoutingRequestCallback {
+    func onSuccess(routeResponse: MNRouteResponse) {
+        MapstedMapApi.shared.handleRouteResponse(routeResponse: routeResponse)
+    }
+    
+    func onError(errorCode: Int, errorMessage: String, alertIds: [String]) {
+        MapstedMapApi.shared.handleRouteError(errorCode: errorCode, errorMessage: errorMessage, alertIds: alertIds)
+    }
+    
+    
 }
 
 
