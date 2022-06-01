@@ -69,10 +69,11 @@ class MainViewController : UIViewController {
             DispatchQueue.main.async {
                 self?.mapsVC?.hideLoadingSpinner()
                 if status {
-                    self?.mapsVC?.displayPropertyOnMap()
+                    self?.mapsVC?.displayPropertyOnMap {
                     
                     //Example how to select and deselect
-                    self?.selectEntities()
+                        self?.selectEntities()
+                    }
                     
                     //Example how to make route requests
                     //self?.makeRouteRequests()
