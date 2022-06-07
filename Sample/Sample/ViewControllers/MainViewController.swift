@@ -57,7 +57,7 @@ class MainViewController : UIViewController {
         self.handleSuccess()
     }
     
-    func displayProperty(propertyInfo: PropertyInfo) {
+    func displayProperty(propertyInfo: PropertyInfo, completion: (() -> ())? = nil) {
         //zoom to property
         DispatchQueue.main.async {
             self.mapsVC?.showLoadingSpinner(text: "Loading...")
@@ -71,8 +71,8 @@ class MainViewController : UIViewController {
                 if status {
                     self?.mapsVC?.displayPropertyOnMap {
                     
-                    //Example how to select and deselect
-                        self?.selectEntities()
+                        //Example how to select and deselect
+                        completion?()
                     }
                     
                     //Example how to make route requests
@@ -89,12 +89,24 @@ class MainViewController : UIViewController {
         let propertyInfos = CoreApi.PropertyManager.getAll()
         if propertyInfos.count > 0 {
             let firstProperty = propertyInfos[0]
-            self.displayProperty(propertyInfo: firstProperty)
+            self.displayProperty(propertyInfo: firstProperty) {
+                self.findNearbyEntities()
+            }
         }
         else {
             print("No properties found")
         }
 	}
+    
+    fileprivate func findNearbyEntities() {
+        CoreApi.LocationManager.getNearbyEntities { listOfEntities in
+            for entity in listOfEntities {
+                print("Found \(entity.entityId) - \(entity.displayName)")
+            }
+            
+        }
+    }
+    
     fileprivate func selectEntities() {
         let entities = CoreApi.PropertyManager.findEntityByName(name: "Apple", propertyId: 504)
         if let firstMatch = entities.first {
