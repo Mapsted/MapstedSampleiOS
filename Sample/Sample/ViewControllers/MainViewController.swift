@@ -90,7 +90,7 @@ class MainViewController : UIViewController {
         if propertyInfos.count > 0 {
             let firstProperty = propertyInfos[0]
             self.displayProperty(propertyInfo: firstProperty) {
-                self.findNearbyEntities()
+                self.estimateDistance()
             }
         }
         else {
@@ -106,6 +106,31 @@ class MainViewController : UIViewController {
             
         }
     }
+    
+    //How to request estimated distance from CoreApi
+    fileprivate func estimateDistance() {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "Appl", propertyId: 504)
+        if let destination = entities.first as? MNSearchEntity {
+            let useStairs = false
+            let routeOptions = MNRouteOptions(useStairs,
+                                              escalators: true,
+                                              elevators: true,
+                                              current: true,
+                                              optimized: true)
+            
+            CoreApi.RoutingManager.requestEstimateFromCurrentLocation(destination: destination,
+                                                                      routeOptions: routeOptions,
+                                                                      completion: { distTime in
+                
+                if let distanceTime = distTime {
+                    print("Estimated distance is \(distanceTime.distanceInMeters)")
+                    print("Estimated time is \(distanceTime.timeInMinutes)")
+                }
+                
+            })
+        }
+    }
+    
     
     fileprivate func selectEntities() {
         let entities = CoreApi.PropertyManager.findEntityByName(name: "Apple", propertyId: 504)
