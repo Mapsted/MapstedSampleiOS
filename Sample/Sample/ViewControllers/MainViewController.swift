@@ -70,13 +70,8 @@ class MainViewController : UIViewController {
                 self?.mapsVC?.hideLoadingSpinner()
                 if status {
                     self?.mapsVC?.displayPropertyOnMap {
-                    
-                        //Example how to select and deselect
                         completion?()
                     }
-                    
-                    //Example how to make route requests
-                    //self?.makeRouteRequests()
                 }
                 else {
                     print("Problem with status on select and draw")
@@ -85,6 +80,7 @@ class MainViewController : UIViewController {
         })
     }
     
+    //Method to handle success scenario after SDK initialized
 	fileprivate func handleSuccess() {
         let propertyInfos = CoreApi.PropertyManager.getAll()
         if propertyInfos.count > 0 {
@@ -98,6 +94,7 @@ class MainViewController : UIViewController {
         }
 	}
     
+    //How to request a list of nearby entities from CoreApi
     fileprivate func findNearbyEntities() {
         CoreApi.LocationManager.getNearbyEntities { listOfEntities in
             for entity in listOfEntities {
