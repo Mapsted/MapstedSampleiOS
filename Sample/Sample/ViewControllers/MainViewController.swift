@@ -70,13 +70,8 @@ class MainViewController : UIViewController {
                 self?.mapsVC?.hideLoadingSpinner()
                 if status {
                     self?.mapsVC?.displayPropertyOnMap {
-                    
-                        //Example how to select and deselect
                         completion?()
                     }
-                    
-                    //Example how to make route requests
-                    //self?.makeRouteRequests()
                 }
                 else {
                     print("Problem with status on select and draw")
@@ -85,12 +80,13 @@ class MainViewController : UIViewController {
         })
     }
     
+    //Method to handle success scenario after SDK initialized
 	fileprivate func handleSuccess() {
         let propertyInfos = CoreApi.PropertyManager.getAll()
         if propertyInfos.count > 0 {
             let firstProperty = propertyInfos[0]
             self.displayProperty(propertyInfo: firstProperty) {
-                self.findNearbyEntities()
+                self.estimateDistance()
             }
         }
         else {
@@ -98,6 +94,7 @@ class MainViewController : UIViewController {
         }
 	}
     
+    //How to request a list of nearby entities from CoreApi
     fileprivate func findNearbyEntities() {
         CoreApi.LocationManager.getNearbyEntities { listOfEntities in
             for entity in listOfEntities {
@@ -106,6 +103,63 @@ class MainViewController : UIViewController {
             
         }
     }
+    
+    //How to search for entities by name from CoreApi
+    fileprivate func findEntityByName(name: String, propertyId: Int) {
+        let matchedEntities = CoreApi.PropertyManager.findEntityByName(name: name, propertyId: propertyId)
+        print("Matched \(matchedEntities.count) for \(name) in \(propertyId)")
+        for match in matchedEntities {
+            print("Match \(match.displayName) = \(match.entityId)")
+        }
+    }
+    
+    //How to request estimated distance from current user location using CoreApi
+    fileprivate func estimateDistanceFromCurrentLocation() {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "Appl", propertyId: 504)
+        if let destination = entities.first as? MNSearchEntity {
+            let useStairs = false
+            let routeOptions = MNRouteOptions(useStairs,
+                                              escalators: true,
+                                              elevators: true,
+                                              current: true,
+                                              optimized: true)
+            
+            CoreApi.RoutingManager.requestEstimateFromCurrentLocation(destination: destination,
+                                                                      routeOptions: routeOptions,
+                                                                      completion: { distTime in
+                
+                if let distanceTime = distTime {
+                    print("Estimated distance is \(distanceTime.distanceInMeters)")
+                    print("Estimated time is \(distanceTime.timeInMinutes)")
+                }
+            })
+        }
+    }
+    
+    
+    //How to request estimated distance from CoreApi
+    fileprivate func estimateDistance() {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "an", propertyId: 504)
+        if let from = entities.first as? MNSearchEntity, let to = entities[1...].randomElement() as? MNSearchEntity {
+            let useStairs = false
+            let routeOptions = MNRouteOptions(useStairs,
+                                              escalators: true,
+                                              elevators: true,
+                                              current: false,
+                                              optimized: true)
+            print("Estimating distance from \(from.displayName) to \(to.displayName)")
+            CoreApi.RoutingManager.requestEstimate(start: from,
+                                                   destination: to,
+                                                   routeOptions: routeOptions,
+                                                   completion: { distTime in
+                if let distanceTime = distTime {
+                    print("Estimated distance is \(distanceTime.distanceInMeters) meter(s)")
+                    print("Estimated time is \(distanceTime.timeInMinutes) minute(s)")
+                }
+            })
+        }
+    }
+    
     
     fileprivate func selectEntities() {
         let entities = CoreApi.PropertyManager.findEntityByName(name: "Apple", propertyId: 504)
