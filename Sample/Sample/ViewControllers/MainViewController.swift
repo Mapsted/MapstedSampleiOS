@@ -30,9 +30,13 @@ class MainViewController : UIViewController {
         super.viewDidLoad()
         
         spinnerView.startAnimating()
-        //addMapView()
         
-		MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
+        if CoreApi.hasInit() {
+            handleSuccess()
+        }
+        else {
+            MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,7 +90,7 @@ class MainViewController : UIViewController {
         if propertyInfos.count > 0 {
             let firstProperty = propertyInfos[0]
             self.displayProperty(propertyInfo: firstProperty) {
-                self.estimateDistance()
+                self.findAllEntities(propertyId: firstProperty.propertyId)
             }
         }
         else {
@@ -123,8 +127,8 @@ class MainViewController : UIViewController {
     }
     
     //How to request estimated distance from current user location using CoreApi
-    fileprivate func estimateDistanceFromCurrentLocation() {
-        let entities = CoreApi.PropertyManager.findEntityByName(name: "Appl", propertyId: 504)
+    fileprivate func estimateDistanceFromCurrentLocation(propertyId: Int) {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "Appl", propertyId: propertyId)
         if let destination = entities.first as? MNSearchEntity {
             let useStairs = false
             let routeOptions = MNRouteOptions(useStairs,
@@ -147,8 +151,8 @@ class MainViewController : UIViewController {
     
     
     //How to request estimated distance from CoreApi
-    fileprivate func estimateDistance() {
-        let entities = CoreApi.PropertyManager.findEntityByName(name: "an", propertyId: 504)
+    fileprivate func estimateDistance(propertyId: Int) {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "an", propertyId: propertyId)
         if let from = entities.first as? MNSearchEntity, let to = entities[1...].randomElement() as? MNSearchEntity {
             let useStairs = false
             let routeOptions = MNRouteOptions(useStairs,
@@ -169,9 +173,16 @@ class MainViewController : UIViewController {
         }
     }
     
+    fileprivate func allEntities(propertyId: Int) {
+        let entities = CoreApi.PropertyManager.getSearchEntities(propertyId: propertyId)
+        for entity in entities {
+            print("#Entity: \(entity.entityId) = \(entity.displayName)")
+        }
+    }
     
-    fileprivate func selectEntities() {
-        let entities = CoreApi.PropertyManager.findEntityByName(name: "Apple", propertyId: 504)
+    
+    fileprivate func selectEntities(propertyId: Int) {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "Apple", propertyId: propertyId)
         if let firstMatch = entities.first {
             print("Selecting ... \(firstMatch.entityId) = \(firstMatch.displayName)")
             MapstedMapApi.shared.selectEntity(entity: firstMatch)
@@ -183,9 +194,9 @@ class MainViewController : UIViewController {
         }
          */
     }
-    fileprivate func makeRouteRequests() {
-        let entities = CoreApi.PropertyManager.findEntityByName(name: "Appl", propertyId: 504)
-        let otherEntities = CoreApi.PropertyManager.getSearchEntities(propertyId: 504)
+    fileprivate func makeRouteRequests(propertyId: Int) {
+        let entities = CoreApi.PropertyManager.findEntityByName(name: "Appl", propertyId: propertyId)
+        let otherEntities = CoreApi.PropertyManager.getSearchEntities(propertyId: propertyId)
         if let firstMatch = entities.first,
             let randomDestination1 = otherEntities.randomElement(),
             let randomDestination2 = otherEntities.randomElement(){
@@ -229,10 +240,7 @@ class MainViewController : UIViewController {
             DispatchQueue.global(qos: .userInteractive).async {
                 CoreApi.RoutingManager.requestRoute(request: routeRequest, routingRequestCallback: self)
             }
-            
         }
-        
-        
     }
 }
 
