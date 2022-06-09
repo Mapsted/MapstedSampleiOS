@@ -94,6 +94,15 @@ class MainViewController : UIViewController {
         }
 	}
     
+    //How to search for entities by name from CoreApi
+    fileprivate func findAllEntities(propertyId: Int) {
+        let matchedEntities = CoreApi.PropertyManager.getSearchEntities(propertyId: propertyId)
+        print("Getting all search entities in \(propertyId)")
+        for match in matchedEntities {
+            print("##Found \(match.displayName) = \(match.entityId) in \(propertyId)")
+        }
+    }
+    
     //How to request a list of nearby entities from CoreApi
     fileprivate func findNearbyEntities() {
         CoreApi.LocationManager.getNearbyEntities { listOfEntities in
