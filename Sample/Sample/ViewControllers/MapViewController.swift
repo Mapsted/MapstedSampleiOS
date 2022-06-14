@@ -23,7 +23,12 @@ class MapViewController : UIViewController {
 	public override func viewDidLoad() {
 		super.viewDidLoad()
         showSpinner()
-		MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
+        if CoreApi.hasInit() {
+            self.onSuccess()
+        }
+        else {
+            MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
+        }
 	}
 	
     //MARK: - Show & Hide Spinner
@@ -57,24 +62,27 @@ class MapViewController : UIViewController {
 		mapViewController.didMove(toParent: self)
         
         //Added handleSuccess once MapView is ready to avoid any plotting issues.
-        self.handleSuccess()
+        let propertyId = 504
+        self.startDownload(propertyId: propertyId)
 	}
+    
+    func startDownload(propertyId: Int) {
+        CoreApi.PropertyManager.startDownload(propertyId: propertyId, propertyDownloadListener: self)
+    }
 	
     //MARK: - Download Property and Draw Property on Success
 		//Handler for initialization notification
 	fileprivate func handleSuccess() {
-			//Some property within the licence
-		let propertyId = 504
-		
-			//Start progress animation
-		
-		
-		CoreApi.PropertyManager.startDownload(propertyId: propertyId, propertyDownloadListener: self)
+        
+        DispatchQueue.main.async {
+            self.setupUI()
+        }
+        
 		
 	}
 	
 		//Helper method to draw property.
-	func drawProperty(propertyId: Int) {
+    func drawProperty(propertyId: Int, completion: @escaping (() -> Void)) {
 		
 		guard let propertyData = CoreApi.PropertyManager.getCached(propertyId: propertyId) else {
 			print("No property Data")
@@ -85,10 +93,20 @@ class MapViewController : UIViewController {
 			MapstedMapApi.shared.drawProperty(isSelected: true, propertyData: propertyData)
 			if let propertyInfo = PropertyInfo(propertyId: propertyId) {
 				MapstedMapApi.shared.mapView()?.moveToLocation(mercator: propertyInfo.getCentroid(), zoom: 18, duration: 0.2)
+                completion();
 			}
 			self.hideSpinner()
 		}
 	}
+    
+    //How to search for entities by name from CoreApi
+    fileprivate func findEntityByName(name: String, propertyId: Int) {
+        let matchedEntities = CoreApi.PropertyManager.findEntityByName(name: name, propertyId: propertyId)
+        print("Matched \(matchedEntities.count) for \(name) in \(propertyId)")
+        for match in matchedEntities {
+            print("Match \(match.displayName) = \(match.entityId)")
+        }
+    }
 }
 
 extension MapViewController {
@@ -115,9 +133,7 @@ extension MapViewController {
 extension MapViewController : CoreInitCallback {
     func onSuccess() {
         //Once the Map API Setup is complete, Setup the Mapview
-        DispatchQueue.main.async {
-            self.setupUI()
-        }
+        self.handleSuccess()
     }
     
     func onFailure(errorCode: Int, errorMessage: String) {
@@ -131,7 +147,9 @@ extension MapViewController : CoreInitCallback {
 
 extension MapViewController : PropertyDownloadListener {
 	func onSuccess(propertyId: Int) {
-		self.drawProperty(propertyId: propertyId)
+        self.drawProperty(propertyId: propertyId, completion: {
+            self.findEntityByName(name: "ar", propertyId: propertyId)
+        })
 	}
 	
 	func onSuccess(propertyId: Int, buildingId: Int) {
