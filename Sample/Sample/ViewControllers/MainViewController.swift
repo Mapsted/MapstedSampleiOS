@@ -10,8 +10,11 @@ import UIKit
 import MapstedCore
 import MapstedMap
 import MapstedMapUi
+import LocationMarketing
 
 class MainViewController : UIViewController {
+   
+    
     
     private var containerVC: ContainerViewController?
     private var mapsVC: MapstedMapUiViewController?
@@ -59,6 +62,16 @@ class MainViewController : UIViewController {
         }
         
         self.handleSuccess()
+    }
+    
+    func getGeoFenceNotifications() {
+        //Add self
+        LocMarketingApi.shared.addGeofenceEventListener(listener: self)
+        /**
+         //Remove Listener
+         //LocMarketingApi.shared.removeGeofenceEventListener(listener: self)
+         */
+        
     }
     
     func displayProperty(propertyInfo: PropertyInfo, completion: (() -> ())? = nil) {
@@ -273,6 +286,11 @@ extension MainViewController: RoutingRequestCallback {
     
 }
 
+extension MainViewController: GeofenceEventListener {
+    func onGeofenceEvent(propertyId: Int, triggerId: String, campaignId: String) {
+        print("Go GeofenceEvent for \(propertyId) with Trigger: \(triggerId), Campaign: \(campaignId)")
+    }
+}
 
 extension MainViewController : MNAlertDelegate {
     func showAlerts() {
