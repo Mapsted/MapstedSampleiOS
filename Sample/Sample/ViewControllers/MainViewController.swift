@@ -103,7 +103,9 @@ class MainViewController : UIViewController {
         if propertyInfos.count > 0 {
             let firstProperty = propertyInfos[0]
             self.displayProperty(propertyInfo: firstProperty) {
-                self.findAllEntities(propertyId: firstProperty.propertyId)
+                let propertyId = firstProperty.propertyId
+                //self.findEntityByName(name: "Washrooms", propertyId: propertyId)
+                self.getCategories(propertyId: propertyId)
             }
         }
         else {
@@ -136,6 +138,20 @@ class MainViewController : UIViewController {
         print("Matched \(matchedEntities.count) for \(name) in \(propertyId)")
         for match in matchedEntities {
             print("Match \(match.displayName) = \(match.entityId)")
+        }
+    }
+    
+    fileprivate func getCategories(propertyId: Int) {
+        let categories = CoreApi.PropertyManager.getCategories(propertyId: propertyId)
+        for category in categories.filter({$0.type == .Root}) {
+            print("#Category: \(category.name). isRoot: \(category.type == .Root)")
+            for child in category.childCategories {
+                print("---#Category Child: \(child.name)")
+                for subChild in child.childCategories {
+                    print("-----#Category Subchild: \(subChild.name)")
+                }
+            }
+            
         }
     }
     
