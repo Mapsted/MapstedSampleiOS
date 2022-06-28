@@ -105,7 +105,9 @@ class MainViewController : UIViewController {
             self.displayProperty(propertyInfo: firstProperty) {
                 let propertyId = firstProperty.propertyId
                 //self.findEntityByName(name: "Washrooms", propertyId: propertyId)
-                self.getCategories(propertyId: propertyId)
+                //self.getCategories(propertyId: propertyId)
+                
+                self.searchPOIs(propertyId: propertyId)
             }
         }
         else {
@@ -139,6 +141,103 @@ class MainViewController : UIViewController {
         for match in matchedEntities {
             print("Match \(match.displayName) = \(match.entityId)")
         }
+    }
+    
+    //How to search for Points of Interest with filters using CoreApi.PropertyManager
+    fileprivate func searchPOIs(propertyId: Int) {
+        let floorFilter = PoiFilter.Builder().addFilter(
+            PoiIntersectionFilter.Builder()
+                .addFloor(id: 942)
+                .build())
+            .build()
+        
+        CoreApi.PropertyManager.searchPOIs(filter: floorFilter, propertyId: propertyId, completion: { (searchables: [ISearchable] ) in
+            for searchable in searchables {
+                print("#SearchPOI: Found \(searchable.entityId) = \(searchable.displayName) - Floor: \(searchable.floorId)")
+            }
+            
+            
+        })
+        
+        let categoryFilter = PoiFilter.Builder().addFilter(
+            PoiIntersectionFilter.Builder()
+                .addCategory(id: "5ff77d3a83919e8624ce0bdc") //Washroom
+                .build())
+            .build()
+        
+        CoreApi.PropertyManager.searchPOIs(filter: categoryFilter, propertyId: propertyId, completion: { (searchables: [ISearchable] ) in
+            for searchable in searchables {
+                print("#SearchPOI: Found \(searchable.entityId) = \(searchable.displayName) - Floor : \(searchable.floorId) - Category: \(searchable.categoryName)")
+            }
+            
+            
+        })
+    }
+    
+    //How to filter entities using PoiFilter
+    fileprivate func findEntityByNameAndCheckFilters(name: String, propertyId: Int) {
+        let matchedEntities = CoreApi.PropertyManager.findEntityByName(name: name, propertyId: propertyId)
+        print("Matched \(matchedEntities.count) for \(name) in \(propertyId)")
+        
+        //Create filter for floor 941 and categories "5ff77d3a83919e8624ce0bdc" OR
+        let poiFilter1 = PoiFilter.Builder().addFilter(
+            PoiIntersectionFilter.Builder()
+                .addCategory(id: "60b79e15f889e01204d40923")
+                .build())
+            .build()
+
+        for match in matchedEntities.filter({poiFilter1.includePoi(searchable: $0)}) {
+            print("#Match:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+        }
+        
+        for match in matchedEntities.filter({!poiFilter1.includePoi(searchable: $0)}) {
+            print("#Match Not:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+        }
+        
+        
+        //Filter only floor 942
+        let poiFilter2 = PoiFilter.Builder().addFilter(
+            PoiIntersectionFilter.Builder()
+                .addFloor(id: 942)
+                .build())
+            .build()
+        
+        for match in matchedEntities.filter({poiFilter2.includePoi(searchable: $0)}) {
+            print("#Match:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+        }
+        
+        for match in matchedEntities.filter({!poiFilter2.includePoi(searchable: $0)}) {
+            print("#Match Not:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+        }
+        
+        print("#Mathces for Filter 3")
+        //Create filter for floor 941 and categories "5ff77d3a83919e8624ce0bdc" (washroom)
+        let poiFilter3 = PoiFilter.Builder()
+            .addFilter(
+                PoiIntersectionFilter
+                .Builder()
+                .addFloor(id: 941)
+                .addCategory(id: "5ff77d3a83919e8624ce0bdc")
+                .build()
+            )
+            .addFilter(
+                PoiIntersectionFilter
+                .Builder()
+                .addFloor(id: 942)
+                .addCategory(id: "5ff77d3883919e8624ce0bc4")
+                .build()
+            )
+            
+            .build()
+        
+        for match in matchedEntities.filter({poiFilter3.includePoi(searchable: $0)}) {
+            print("#Match:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+        }
+        
+        for match in matchedEntities.filter({!poiFilter3.includePoi(searchable: $0)}) {
+            print("#Match Not:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+        }
+        
     }
     
     fileprivate func getCategories(propertyId: Int) {
