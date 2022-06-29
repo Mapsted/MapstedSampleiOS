@@ -104,10 +104,14 @@ class MainViewController : UIViewController {
             let firstProperty = propertyInfos[0]
             self.displayProperty(propertyInfo: firstProperty) {
                 let propertyId = firstProperty.propertyId
+                
                 //self.findEntityByName(name: "Washrooms", propertyId: propertyId)
+                
                 //self.getCategories(propertyId: propertyId)
                 
-                self.searchPOIs(propertyId: propertyId)
+                //self.searchPOIs(propertyId: propertyId)
+                
+                self.chooseFromEntities(name: "washroom", propertyId: propertyId)
             }
         }
         else {
@@ -141,6 +145,13 @@ class MainViewController : UIViewController {
         for match in matchedEntities {
             print("Match \(match.displayName) = \(match.entityId)")
         }
+    }
+    
+    fileprivate func chooseFromEntities(name: String, propertyId: Int) {
+        let matchedEntities = CoreApi.PropertyManager.findEntityByName(name: name, propertyId: propertyId)
+        guard !matchedEntities.isEmpty else { return }
+        mapsVC?.showEntityChooser(entities: matchedEntities, name: name)
+
     }
     
     //How to search for Points of Interest with filters using CoreApi.PropertyManager
