@@ -107,11 +107,11 @@ class MainViewController : UIViewController {
                 
                 //self.findEntityByName(name: "Washrooms", propertyId: propertyId)
                 
-                //self.getCategories(propertyId: propertyId)
+                self.getCategories(propertyId: propertyId)
                 
                 //self.searchPOIs(propertyId: propertyId)
                 
-                self.chooseFromEntities(name: "washroom", propertyId: propertyId)
+               // self.chooseFromEntities(name: "lounge", propertyId: propertyId)
             }
         }
         else {
@@ -252,17 +252,56 @@ class MainViewController : UIViewController {
     }
     
     fileprivate func getCategories(propertyId: Int) {
-        let categories = CoreApi.PropertyManager.getCategories(propertyId: propertyId)
-        for category in categories.filter({$0.type == .Root}) {
-            print("#Category: \(category.name). isRoot: \(category.type == .Root)")
-            for child in category.childCategories {
-                print("---#Category Child: \(child.name)")
-                for subChild in child.childCategories {
-                    print("-----#Category Subchild: \(subChild.name)")
+        CoreApi.PropertyManager.getCategories(propertyId: propertyId, callback: { result in
+            guard let result = result else {
+                return
+                
+            }
+            let categories = result.getAllCategories()
+            print("#Category.getAll : Found \(categories.count)")
+            
+            /*
+            var count = 0
+            for category in categories.filter({$0.type == .Root}) {
+                count += 1;
+                print("#Category: \(count) - \(category.name). isRoot: \(category.type == .Root)")
+                for child in category.childCategories {
+                    count += 1;
+                    print("---#Category Child: \(count) - \(child.name)")
+                    for subChild in child.childCategories {
+                        count += 1;
+                        print("-----#Category Subchild: \(count) - \(subChild.name)")
+                    }
+                }
+                
+            }
+            */
+            
+            if let category = categories.randomElement() {
+                print("#Category random element  \(category.id) - \(category.name)")
+                
+                if let checked = result.findById(uuid: category.id) {
+                    print("#Category check \(category.id) - \(category.name) MATCHES \(checked.id) - \(checked.name)")
+                }
+                
+                for parent in result.getParentCategories(uuid: category.id)  {
+                    print("#Category.Parent \(parent.id) - \(parent.name) of \(category.id) - \(category.name)")
+                }
+                for ancestor in result.getAncestorCategories(uuid: category.id)  {
+                    print("#Category.Ancestor \(ancestor.id) - \(ancestor.name) of \(category.id) - \(category.name)")
+                }
+                for descendant in result.getDescendantCategories(uuid: category.id) {
+                    print("#Category.Descendant \(descendant.id) - \(descendant.name) of \(category.id) - \(category.name)")
                 }
             }
             
-        }
+            let name = "washroom"
+            let washrooms = result.findByName(name: name)
+            for washroom in washrooms {
+                print("#Category.findByName(\"\(name)\") matched by \(washroom.id) = \(washroom.name)")
+            }
+        })
+        
     }
     
     //How to request estimated distance from current user location using CoreApi
