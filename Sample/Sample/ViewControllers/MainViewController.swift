@@ -275,24 +275,10 @@ class MainViewController : UIViewController {
                 
             }
             let categories = result.getAllCategories()
-            print("#Category.getAll : Found \(categories.count)")
+            print("#Category.getAllCategories : Found \(categories.count)")
             
-            /*
-            var count = 0
-            for category in categories.filter({$0.type == .Root}) {
-                count += 1;
-                print("#Category: \(count) - \(category.name). isRoot: \(category.type == .Root)")
-                for child in category.childCategories {
-                    count += 1;
-                    print("---#Category Child: \(count) - \(child.name)")
-                    for subChild in child.childCategories {
-                        count += 1;
-                        print("-----#Category Subchild: \(count) - \(subChild.name)")
-                    }
-                }
-                
-            }
-            */
+            let roots = result.getRootCategories()
+            print("#Category.getRootCategories : Found \(roots.count)")
             
             if let category = categories.randomElement() {
                 print("#Category random element  \(category.id) - \(category.name)")
