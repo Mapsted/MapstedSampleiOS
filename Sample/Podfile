@@ -7,8 +7,8 @@ source 'https://github.com/Mapsted/podspec.git'
 use_frameworks!
 
 target 'Sample' do
-  pod 'mapsted-sdk-map-ui', '~> 4.6.7'
+  pod 'mapsted-sdk-map-ui', '~> 4.6.8'
 end
 target 'Sample_MapOnly' do
-  pod 'mapsted-sdk-map', '~> 4.6.7'
+  pod 'mapsted-sdk-map', '~> 4.6.8'
 end
