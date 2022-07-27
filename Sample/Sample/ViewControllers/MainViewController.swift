@@ -66,7 +66,7 @@ class MainViewController : UIViewController {
     
     func getGeoFenceNotifications() {
         //Add self
-        LocMarketingApi.shared.addGeofenceEventListener(listener: self)
+        CoreApi.GeofenceManager.addListener(self)
         /**
          //Remove Listener
          //LocMarketingApi.shared.removeGeofenceEventListener(listener: self)
@@ -455,8 +455,8 @@ extension MainViewController: RoutingRequestCallback {
 }
 
 extension MainViewController: GeofenceEventListener {
-    func onGeofenceEvent(propertyId: Int, triggerId: String, campaignId: String) {
-        print("Go GeofenceEvent for \(propertyId) with Trigger: \(triggerId), Campaign: \(campaignId)")
+    func onGeofenceEvent(propertyId: Int, triggerId: String) {
+        print("Go GeofenceEvent for \(propertyId) with Trigger: \(triggerId)")
     }
 }
 
