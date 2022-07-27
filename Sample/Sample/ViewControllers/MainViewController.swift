@@ -66,7 +66,7 @@ class MainViewController : UIViewController {
     
     func getGeoFenceNotifications() {
         //Add self
-        LocMarketingApi.shared.addGeofenceEventListener(listener: self)
+        CoreApi.GeofenceManager.addListener(self)
         /**
          //Remove Listener
          //LocMarketingApi.shared.removeGeofenceEventListener(listener: self)
@@ -167,6 +167,23 @@ class MainViewController : UIViewController {
             .build()
         
         CoreApi.PropertyManager.searchPOIs(filter: categoryFilter, propertyId: propertyId, completion: { (searchables: [ISearchable] ) in
+            
+            let resultCount = searchables.count
+            print("Found \(resultCount) items")
+            for searchable in searchables.filter({$0.subcategoryUids.contains(categoryId)}) {
+                
+                for zone in searchable.entityZones {
+                    //Entity Zone with propertyId, buildingId, floorId, entityId
+                }
+                for location in searchable.locations {
+                    //Locations with x, y, z as well as propertyId, buildingId, floorId
+                }
+                
+                for entity: ISearchable in searchable.entities {
+                    print("Found entity with \(entity.displayName) - \(entity.entityId)")
+                }
+            }
+            
             self.mapsVC?.showEntityChooser(entities: searchables, name: categoryId)
         })
     }
@@ -181,7 +198,7 @@ class MainViewController : UIViewController {
         
         CoreApi.PropertyManager.searchPOIs(filter: floorFilter, propertyId: propertyId, completion: { (searchables: [ISearchable] ) in
             for searchable in searchables {
-                print("#SearchPOI: Found \(searchable.entityId) = \(searchable.displayName) - Floor: \(searchable.floorId)")
+                print("#SearchPOI: Found \(searchable.displayName) - Items: \(searchable.entities.count)")
             }
             
             
@@ -195,7 +212,7 @@ class MainViewController : UIViewController {
         
         CoreApi.PropertyManager.searchPOIs(filter: categoryFilter, propertyId: propertyId, completion: { (searchables: [ISearchable] ) in
             for searchable in searchables {
-                print("#SearchPOI: Found \(searchable.entityId) = \(searchable.displayName) - Floor : \(searchable.floorId) - Category: \(searchable.categoryName)")
+                print("#SearchPOI: Found \(searchable.displayName)")
             }
             
             
@@ -455,8 +472,8 @@ extension MainViewController: RoutingRequestCallback {
 }
 
 extension MainViewController: GeofenceEventListener {
-    func onGeofenceEvent(propertyId: Int, triggerId: String, campaignId: String) {
-        print("Go GeofenceEvent for \(propertyId) with Trigger: \(triggerId), Campaign: \(campaignId)")
+    func onGeofenceEvent(propertyId: Int, triggerId: String) {
+        print("Go GeofenceEvent for \(propertyId) with Trigger: \(triggerId)")
     }
 }
 
