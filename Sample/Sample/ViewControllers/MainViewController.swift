@@ -28,14 +28,18 @@ class MainViewController : UIViewController {
             self.containerVC = containerVC
         }
     }
-    
+    var selectedProperty: PropertyInfo? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
         
         spinnerView.startAnimating()
+        if let _ = selectedProperty {
+            self.onSuccess()
+            return
+        }
         
         if CoreApi.hasInit() {
-            handleSuccess()
+            self.onSuccess()
         }
         else {
             MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
@@ -48,6 +52,16 @@ class MainViewController : UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard let selectedProperty = selectedProperty else {
+            return
+        }
+        CoreApi.PropertyManager.unload(propertyId: selectedProperty.propertyId, listener: self)
+        
+        //MapstedMapApi.shared.removeProperty(propertyId: selectedProperty.propertyId)
     }
     
     //MARK: - Intialize and add MapView and display property
@@ -99,9 +113,9 @@ class MainViewController : UIViewController {
     
     //Method to handle success scenario after SDK initialized
 	fileprivate func handleSuccess() {
-        let propertyInfos = CoreApi.PropertyManager.getAll()
+        let propertyInfos = CoreApi.PropertyManager.getAll().filter({$0.propertyId == 823})
         if propertyInfos.count > 0 {
-            let firstProperty = propertyInfos[0]
+            let firstProperty = selectedProperty ?? propertyInfos[0]
             self.displayProperty(propertyInfo: firstProperty) {
                 let propertyId = firstProperty.propertyId
                 
@@ -112,10 +126,10 @@ class MainViewController : UIViewController {
                 //self.searchPOIs(propertyId: propertyId)
                 
                 //Search for POIS with filter
-                self.searchPOIsWithCategoryFilter(propertyId: propertyId, categoryId: "abc123")
+                //self.searchPOIsWithCategoryFilter(propertyId: propertyId, categoryId: "abc123")
 
                 
-               // self.chooseFromEntities(name: "lounge", propertyId: propertyId)
+               self.chooseFromEntities(name: "lounge", propertyId: propertyId)
             }
         }
         else {
@@ -486,3 +500,11 @@ extension MainViewController : MNAlertDelegate {
     }
 }
 
+
+extension MainViewController: PropertyActionCompleteListener {
+    func completed(action: PropertyAction, propertyId: Int, sucessfully: Bool, error: Error?) {
+        print("Completed \(action) on \(propertyId) successfuly? \(sucessfully)")
+    }
+    
+    
+}
