@@ -134,9 +134,12 @@ class MainViewController : UIViewController {
     
     //How to request a list of nearby entities from CoreApi
     fileprivate func findNearbyEntities() {
-        CoreApi.LocationManager.getNearbyEntities { listOfEntities in
-            for entity in listOfEntities {
-                print("Found \(entity.entityId) - \(entity.displayName)")
+        CoreApi.LocationManager.getNearbyEntities { listOfEntityZoneDistances in
+            print("Found \(listOfEntityZoneDistances.count) nearby entities")
+            for entityZoneDistance in listOfEntityZoneDistances {
+                let zone = entityZoneDistance.getZone()
+                let distance = entityZoneDistance.getDistance()
+                print("Found \(zone.entityId()) - \(distance)")
             }
             
         }
