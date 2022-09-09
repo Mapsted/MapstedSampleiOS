@@ -147,6 +147,7 @@ extension MapViewController : CoreInitCallback {
 
 extension MapViewController : PropertyDownloadListener {
 	func onSuccess(propertyId: Int) {
+        MapstedMapApi.shared.downloadPackage(propertyId: propertyId) //download base map for property
         self.drawProperty(propertyId: propertyId, completion: {
             self.findEntityByName(name: "ar", propertyId: propertyId)
         })
