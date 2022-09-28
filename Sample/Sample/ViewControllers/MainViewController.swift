@@ -76,10 +76,8 @@ class MainViewController : UIViewController {
     
     func displayProperty(propertyInfo: PropertyInfo, completion: (() -> ())? = nil) {
         //zoom to property
-        DispatchQueue.main.async {
             self.mapsVC?.showLoadingSpinner(text: "Loading...")
             self.spinnerView.stopAnimating()
-        }
         
 		let propertyId = propertyInfo.getPropertyId()
         mapsVC?.selectAndDrawProperty(propertyId: propertyId, callback: {[weak self] status in
