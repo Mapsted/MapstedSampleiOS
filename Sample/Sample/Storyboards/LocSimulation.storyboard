@@ -24,10 +24,10 @@
             </objects>
             <point key="canvasLocation" x="4488" y="708"/>
         </scene>
-        <!--Main View Controller-->
+        <!--Loc Simulation Main View Controller-->
         <scene sceneID="1lY-di-96T">
             <objects>
-                <viewController id="eha-OJ-IOy" customClass="MainViewController" customModule="Sample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="eha-OJ-IOy" customClass="LocSimulationMainViewController" customModule="Sample_LocSimulation" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vMc-KR-idq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -56,7 +56,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="HcG-Wa-4GJ"/>
                     <connections>
-                        <outlet property="spinnerView" destination="eIh-U1-kgE" id="p3e-N4-hIc"/>
+                        <outlet property="spinnerView" destination="eIh-U1-kgE" id="AoJ-SH-2DQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dTy-qx-RfK" userLabel="First Responder" sceneMemberID="firstResponder"/>
