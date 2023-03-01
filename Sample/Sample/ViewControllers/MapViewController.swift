@@ -99,6 +99,8 @@ class MapViewController : UIViewController {
 		}
 	}
     
+    //MARK: - Utility Method
+    
     //How to search for entities by name from CoreApi
     fileprivate func findEntityByName(name: String, propertyId: Int) {
         let matchedEntities = CoreApi.PropertyManager.findEntityByName(name: name, propertyId: propertyId)
@@ -109,6 +111,7 @@ class MapViewController : UIViewController {
     }
 }
 
+//MARK: - UI Constraints Helper method
 extension MapViewController {
 		//Helper method
 	func addParentsConstraints(view: UIView?) {
@@ -130,6 +133,7 @@ extension MapViewController {
 	}
 }
 
+//MARK: - Core Init Callback methods
 extension MapViewController : CoreInitCallback {
     func onSuccess() {
         //Once the Map API Setup is complete, Setup the Mapview
@@ -145,6 +149,7 @@ extension MapViewController : CoreInitCallback {
     }
 }
 
+//MARK: - Property Download Listener Callback methods
 extension MapViewController : PropertyDownloadListener {
 	func onSuccess(propertyId: Int) {
         self.drawProperty(propertyId: propertyId, completion: {

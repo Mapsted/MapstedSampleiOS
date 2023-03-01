@@ -21,13 +21,15 @@ class MainViewController : UIViewController {
     
     @IBOutlet weak var spinnerView: UIActivityIndicatorView!
     
-    //MARK: -
+    //MARK: - Segue Handler
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let containerVC = segue.destination as? ContainerViewController, segue.identifier == "containerSegue" {
             self.containerVC = containerVC
         }
     }
+    
+    //MARK: - ViewController Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,6 +122,8 @@ class MainViewController : UIViewController {
             print("No properties found")
         }
 	}
+    
+    //MARK: - Utility Methods
     
     //How to search for entities by name from CoreApi
     fileprivate func findAllEntities(propertyId: Int) {
@@ -443,6 +447,7 @@ class MainViewController : UIViewController {
     }
 }
 
+//MARK: - Core Init Callback methods
 extension MainViewController : CoreInitCallback {
     func onSuccess() {
         //Once the Map API Setup is complete, Setup the Mapview
@@ -460,6 +465,7 @@ extension MainViewController : CoreInitCallback {
     }
 }
 
+//MARK: - Routing Request Callback methods
 extension MainViewController: RoutingRequestCallback {
     func onSuccess(routeResponse: MNRouteResponse) {
         MapstedMapApi.shared.handleRouteResponse(routeResponse: routeResponse)
@@ -478,6 +484,7 @@ extension MainViewController: GeofenceEventListener {
     }
 }
 
+//MARK: - MN Alert Delegate methods
 extension MainViewController : MNAlertDelegate {
     func showAlerts() {
     }
