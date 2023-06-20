@@ -456,8 +456,12 @@ extension MainViewController : CoreInitCallback {
         }
     }
     
-    func onFailure(errorCode: Int, errorMessage: String) {
-        print("Failed with \(errorCode) - \(errorMessage)")
+    func onFailure(errorCode: Int) {
+        print("Failed with \(errorCode)")
+    }
+    
+    func onStatusUpdate(update: Int) {
+        print("OnStatusUpdate: \(update)")
     }
     
     func onStatusMessage(messageType: StatusMessageType) {

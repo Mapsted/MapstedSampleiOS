@@ -140,8 +140,12 @@ extension MapViewController : CoreInitCallback {
         self.handleSuccess()
     }
     
-    func onFailure(errorCode: Int, errorMessage: String) {
-        print("Failed to initialize with error: \(errorCode) - \(errorMessage)")
+    func onFailure(errorCode: Int) {
+        print("Failed with \(errorCode)")
+    }
+    
+    func onStatusUpdate(update: Int) {
+        print("OnStatusUpdate: \(update)")
     }
     
     func onStatusMessage(messageType: StatusMessageType) {

@@ -224,8 +224,12 @@ extension LocSimulationMainViewController : CoreInitCallback {
         }
     }
     
-    func onFailure(errorCode: Int, errorMessage: String) {
-        print("Failed with \(errorCode) - \(errorMessage)")
+    func onStatusUpdate(update: Int) {
+        print("OnStatusUpdate: \(update)")
+    }
+    
+    func onFailure(errorCode: Int) {
+        print("Failed with \(errorCode)")
     }
     
     func onStatusMessage(messageType: StatusMessageType) {
