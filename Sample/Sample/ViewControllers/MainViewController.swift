@@ -456,11 +456,11 @@ extension MainViewController : CoreInitCallback {
         }
     }
     
-    func onFailure(errorCode: Int) {
+    func onFailure(errorCode: EnumSdkError) {
         print("Failed with \(errorCode)")
     }
     
-    func onStatusUpdate(update: Int) {
+    func onStatusUpdate(update: EnumSdkUpdate) {
         print("OnStatusUpdate: \(update)")
     }
     

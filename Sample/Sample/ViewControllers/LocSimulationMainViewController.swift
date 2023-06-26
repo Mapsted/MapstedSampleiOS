@@ -224,11 +224,11 @@ extension LocSimulationMainViewController : CoreInitCallback {
         }
     }
     
-    func onStatusUpdate(update: Int) {
+    func onStatusUpdate(update: EnumSdkUpdate) {
         print("OnStatusUpdate: \(update)")
     }
     
-    func onFailure(errorCode: Int) {
+    func onFailure(errorCode: EnumSdkError) {
         print("Failed with \(errorCode)")
     }
     
