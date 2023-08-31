@@ -28,7 +28,8 @@
 		65AD19BF2763E9A6002CDAB1 /* ios_licence.key in Resources */ = {isa = PBXBuildFile; fileRef = 65A8FFE226F183F900B21A69 /* ios_licence.key */; };
 		65AD19C82763E9E6002CDAB1 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AD19C72763E9E6002CDAB1 /* MapViewController.swift */; };
 		65AD19CB2763EA21002CDAB1 /* MapView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65AD19CA2763EA21002CDAB1 /* MapView.storyboard */; };
-		BCB4FA2D1A8CAFB8A7C9F786 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		9BBBCA212AA01FC5001EB788 /* DebugLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBBCA202AA01FC5001EB788 /* DebugLog.swift */; };
+		BCB4FA2D1A8CAFB8A7C9F786 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		C047C89A228B1A8B00E376D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C047C899228B1A8B00E376D0 /* AppDelegate.swift */; };
 		C047C89F228B1A8B00E376D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C047C89D228B1A8B00E376D0 /* Main.storyboard */; };
 		C047C8A1228B1A8D00E376D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C047C8A0228B1A8D00E376D0 /* Assets.xcassets */; };
@@ -86,6 +87,7 @@
 		65AD19CA2763EA21002CDAB1 /* MapView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MapView.storyboard; sourceTree = "<group>"; };
 		67C1F58375862EEB66B8B17A /* Pods-Sample_LocSimulation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sample_LocSimulation.debug.xcconfig"; path = "Target Support Files/Pods-Sample_LocSimulation/Pods-Sample_LocSimulation.debug.xcconfig"; sourceTree = "<group>"; };
 		6A4B802288C48158F2CCCA79 /* Pods_Sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BBBCA202AA01FC5001EB788 /* DebugLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLog.swift; sourceTree = "<group>"; };
 		A07D95B54C70FF084AD30393 /* Pods-Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sample.release.xcconfig"; path = "Target Support Files/Pods-Sample/Pods-Sample.release.xcconfig"; sourceTree = "<group>"; };
 		A89229DCBD1F94518FAE07A7 /* Pods-Sample_MapOnly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sample_MapOnly.release.xcconfig"; path = "Target Support Files/Pods-Sample_MapOnly/Pods-Sample_MapOnly.release.xcconfig"; sourceTree = "<group>"; };
 		C047C896228B1A8B00E376D0 /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,7 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCB4FA2D1A8CAFB8A7C9F786 /* BuildFile in Frameworks */,
+				BCB4FA2D1A8CAFB8A7C9F786 /* (null) in Frameworks */,
 				3CB4BDDBAE7041FCD4B1EFB2 /* Pods_Sample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -205,6 +207,7 @@
 				001C4A7829A8B7B3006B956A /* LocSimulationMainViewController.swift */,
 				E169A73C232A8CE900BF41AB /* MainViewController.swift */,
 				65AD19C72763E9E6002CDAB1 /* MapViewController.swift */,
+				9BBBCA202AA01FC5001EB788 /* DebugLog.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 			files = (
 				C047C89A228B1A8B00E376D0 /* AppDelegate.swift in Sources */,
 				E169A73D232A8CE900BF41AB /* MainViewController.swift in Sources */,
+				9BBBCA212AA01FC5001EB788 /* DebugLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

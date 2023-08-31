@@ -18,6 +18,8 @@ class MainViewController : UIViewController {
     
     private var containerVC: ContainerViewController?
     private var mapsVC: MapstedMapUiViewController?
+	
+	let Logger = DebugLog()
     
     @IBOutlet weak var spinnerView: UIActivityIndicatorView!
     
@@ -35,11 +37,12 @@ class MainViewController : UIViewController {
         super.viewDidLoad()
         
         spinnerView.startAnimating()
-        
+		Logger.Log("Initialize", CoreApi.hasInit())
         if CoreApi.hasInit() {
             handleSuccess()
         }
         else {
+			Logger.Log("MapstedMapApi", "")
             MapstedMapApi.shared.setUp(prefetchProperties: false, callback: self)
         }
     }
@@ -55,6 +58,7 @@ class MainViewController : UIViewController {
     //MARK: - Intialize and add MapView and display property
     
     func addMapView() {
+		Logger.Log("MapstedMapApi", mapsVC ?? "nil")
         if mapsVC == nil {
             if let mapsVC = MapstedMapUiViewController.shared as? MapstedMapUiViewController {
                 mapsVC.setAlertDelegate(alertDelegate: self)
@@ -62,7 +66,6 @@ class MainViewController : UIViewController {
                 containerVC?.addController(controller: mapsVC, yOffset: 0, isNew: false)
             }
         }
-        
         self.handleSuccess()
     }
     
@@ -91,7 +94,7 @@ class MainViewController : UIViewController {
                     }
                 }
                 else {
-                    print("Problem with status on select and draw")
+					self?.Logger.Log("Problem with status on select and draw", status)
                 }
             }
         })
@@ -100,11 +103,13 @@ class MainViewController : UIViewController {
     //Method to handle success scenario after SDK initialized
 	fileprivate func handleSuccess() {
         let propertyInfos = CoreApi.PropertyManager.getAll()
+		Logger.Log("propertyInfos", propertyInfos)
         if propertyInfos.count > 0 {
             let firstProperty = propertyInfos[0]
+			Logger.Log("firstProperty", firstProperty)
             self.displayProperty(propertyInfo: firstProperty) {
                 let propertyId = firstProperty.propertyId
-                
+				self.Logger.Log("displayProperty", propertyId)
                 //self.findEntityByName(name: "Washrooms", propertyId: propertyId)
                 
                 //self.getCategories(propertyId: propertyId)
@@ -119,7 +124,7 @@ class MainViewController : UIViewController {
             }
         }
         else {
-            print("No properties found")
+            self.Logger.Log("No properties found", "")
         }
 	}
     
@@ -128,20 +133,20 @@ class MainViewController : UIViewController {
     //How to search for entities by name from CoreApi
     fileprivate func findAllEntities(propertyId: Int) {
         let matchedEntities = CoreApi.PropertyManager.getSearchEntities(propertyId: propertyId)
-        print("Getting all search entities in \(propertyId)")
+		self.Logger.Log("Getting all search entities in", propertyId)
         for match in matchedEntities {
-            print("##Found \(match.displayName) = \(match.entityId) in \(propertyId)")
+			self.Logger.Log("##Found ", "\(match.displayName) = \(match.entityId) in \(propertyId)")
         }
     }
     
     //How to request a list of nearby entities from CoreApi
     fileprivate func findNearbyEntities() {
         CoreApi.LocationManager.getNearbyEntities { listOfEntityZoneDistances in
-            print("Found \(listOfEntityZoneDistances.count) nearby entities")
+			self.Logger.Log("Found ", "\(listOfEntityZoneDistances.count) nearby entities")
             for entityZoneDistance in listOfEntityZoneDistances {
                 let zone = entityZoneDistance.getZone()
                 let distance = entityZoneDistance.getDistance()
-                print("Found \(zone.entityId()) - \(distance)")
+				self.Logger.Log("Found ", "\(zone.entityId()) - \(distance)")
             }
             
         }
@@ -150,15 +155,16 @@ class MainViewController : UIViewController {
     //How to search for entities by name from CoreApi
     fileprivate func findEntityByName(name: String, propertyId: Int) {
         let matchedEntities = CoreApi.PropertyManager.findEntityByName(name: name, propertyId: propertyId)
-        print("Matched \(matchedEntities.count) for \(name) in \(propertyId)")
+		self.Logger.Log("Matches ", "\(matchedEntities.count) for \(name) in \(propertyId)")
         for match in matchedEntities {
-            print("Match \(match.displayName) = \(match.entityId)")
+			self.Logger.Log("Match ", "\(match.displayName) = \(match.entityId)")
         }
     }
     
     fileprivate func chooseFromEntities(name: String, propertyId: Int) {
         let matchedEntities = CoreApi.PropertyManager.findEntityByName(name: name, propertyId: propertyId)
         guard !matchedEntities.isEmpty else { return }
+		self.Logger.Log("chooseFromEntities ", matchedEntities)
         mapsVC?.showEntityChooser(entities: matchedEntities, name: name)
 
     }
@@ -174,7 +180,7 @@ class MainViewController : UIViewController {
         CoreApi.PropertyManager.searchPOIs(filter: categoryFilter, propertyId: propertyId, completion: { (searchables: [ISearchable] ) in
             
             let resultCount = searchables.count
-            print("Found \(resultCount) items")
+            self.Logger.Log("Found ", "\(resultCount) items")
             for searchable in searchables.filter({$0.subcategoryUids.contains(categoryId)}) {
                 
                 for zone in searchable.entityZones {
@@ -185,7 +191,7 @@ class MainViewController : UIViewController {
                 }
                 
                 for entity: ISearchable in searchable.entities {
-                    print("Found entity with \(entity.displayName) - \(entity.entityId)")
+                    self.Logger.Log("Found entity with ", " \(entity.displayName) - \(entity.entityId)")
                 }
             }
             
@@ -203,7 +209,7 @@ class MainViewController : UIViewController {
         
         CoreApi.PropertyManager.searchPOIs(filter: floorFilter, propertyId: propertyId, completion: { (searchables: [ISearchable] ) in
             for searchable in searchables {
-                print("#SearchPOI: Found \(searchable.displayName) - Items: \(searchable.entities.count)")
+                self.Logger.Log("#SearchPOI: Found", " \(searchable.displayName) - Items: \(searchable.entities.count)")
             }
             
             
@@ -217,7 +223,7 @@ class MainViewController : UIViewController {
         
         CoreApi.PropertyManager.searchPOIs(filter: categoryFilter, propertyId: propertyId, completion: { (searchables: [ISearchable] ) in
             for searchable in searchables {
-                print("#SearchPOI: Found \(searchable.displayName)")
+				self.Logger.Log("#SearchPOI: Found", " \(searchable.displayName)")
             }
             
             
@@ -227,8 +233,7 @@ class MainViewController : UIViewController {
     //How to filter entities using PoiFilter
     fileprivate func findEntityByNameAndCheckFilters(name: String, propertyId: Int) {
         let matchedEntities = CoreApi.PropertyManager.findEntityByName(name: name, propertyId: propertyId)
-        print("Matched \(matchedEntities.count) for \(name) in \(propertyId)")
-        
+		self.Logger.Log("Matched", " \(matchedEntities.count) for \(name) in \(propertyId)")
         //Create filter for floor 941 and categories "5ff77d3a83919e8624ce0bdc" OR
         let poiFilter1 = PoiFilter.Builder().addFilter(
             PoiIntersectionFilter.Builder()
@@ -237,11 +242,11 @@ class MainViewController : UIViewController {
             .build()
 
         for match in matchedEntities.filter({poiFilter1.includePoi(searchable: $0)}) {
-            print("#Match:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+			self.Logger.Log("#Match: ", "\(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
         }
         
         for match in matchedEntities.filter({!poiFilter1.includePoi(searchable: $0)}) {
-            print("#Match Not:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+            self.Logger.Log("#Match Not:", " \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
         }
         
         
@@ -253,14 +258,14 @@ class MainViewController : UIViewController {
             .build()
         
         for match in matchedEntities.filter({poiFilter2.includePoi(searchable: $0)}) {
-            print("#Match:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+			self.Logger.Log("#Match: ", "\(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
         }
         
         for match in matchedEntities.filter({!poiFilter2.includePoi(searchable: $0)}) {
-            print("#Match Not:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+			self.Logger.Log("#Match Not:", " \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
         }
         
-        print("#Mathces for Filter 3")
+		self.Logger.Log("#Mathces for Filter 3", "")
         //Create filter for floor 941 and categories "5ff77d3a83919e8624ce0bdc" (washroom)
         let poiFilter3 = PoiFilter.Builder()
             .addFilter(
@@ -281,11 +286,11 @@ class MainViewController : UIViewController {
             .build()
         
         for match in matchedEntities.filter({poiFilter3.includePoi(searchable: $0)}) {
-            print("#Match:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+            self.Logger.Log("#Match: ", "\(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
         }
         
         for match in matchedEntities.filter({!poiFilter3.includePoi(searchable: $0)}) {
-            print("#Match Not:  \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
+			self.Logger.Log("#Match Not:", " \(match.displayName) = \(match.entityId) - \(match.floorId) - \(match.categoryUid) - \(match.buildingId)")
         }
         
     }
@@ -298,25 +303,25 @@ class MainViewController : UIViewController {
             }
             let categories = result.getAllCategories()
             print("#Category.getAllCategories : Found \(categories.count)")
+			self.Logger.Log("#Category.getAllCategories :", "Found \(categories.count)")
             
             let roots = result.getRootCategories()
-            print("#Category.getRootCategories : Found \(roots.count)")
+			self.Logger.Log("#Category.getRootCategories : Found", roots.count)
             
             if let category = categories.randomElement() {
-                print("#Category random element  \(category.id) - \(category.name)")
-                
+				self.Logger.Log("#Category random element ", " \(category.id) - \(category.name)")
                 if let checked = result.findById(uuid: category.id) {
-                    print("#Category check \(category.id) - \(category.name) MATCHES \(checked.id) - \(checked.name)")
+                    self.Logger.Log("#Category chec", "\(category.id) - \(category.name) MATCHES \(checked.id) - \(checked.name)")
                 }
                 
                 for parent in result.getParentCategories(uuid: category.id)  {
-                    print("#Category.Parent \(parent.id) - \(parent.name) of \(category.id) - \(category.name)")
+                    self.Logger.Log("#Category.Parent ", "\(parent.id) - \(parent.name) of \(category.id) - \(category.name)")
                 }
                 for ancestor in result.getAncestorCategories(uuid: category.id)  {
-                    print("#Category.Ancestor \(ancestor.id) - \(ancestor.name) of \(category.id) - \(category.name)")
+                    self.Logger.Log("#Category.Ancestor", "\(ancestor.id) - \(ancestor.name) of \(category.id) - \(category.name)")
                 }
                 for descendant in result.getDescendantCategories(uuid: category.id) {
-                    print("#Category.Descendant \(descendant.id) - \(descendant.name) of \(category.id) - \(category.name)")
+                    self.Logger.Log("#Category.Descendant ", "\(descendant.id) - \(descendant.name) of \(category.id) - \(category.name)")
                 }
             }
             
@@ -324,6 +329,7 @@ class MainViewController : UIViewController {
             let washrooms = result.findByName(name: name)
             for washroom in washrooms {
                 print("#Category.findByName(\"\(name)\") matched by \(washroom.id) = \(washroom.name)")
+				self.Logger.Log("#Category.findByName(\"\(name)\") matched by", "matched by \(washroom.id) = \(washroom.name)")
             }
         })
         
@@ -345,8 +351,8 @@ class MainViewController : UIViewController {
                                                                       completion: { distTime in
                 
                 if let distanceTime = distTime {
-                    print("Estimated distance is \(distanceTime.distanceInMeters)")
-                    print("Estimated time is \(distanceTime.timeInMinutes)")
+                    self.Logger.Log("Estimated distance is", distanceTime.distanceInMeters)
+					self.Logger.Log("Estimated time is", distanceTime.timeInMinutes)
                 }
             })
         }
@@ -363,14 +369,14 @@ class MainViewController : UIViewController {
                                               elevators: true,
                                               current: false,
                                               optimized: true)
-            print("Estimating distance from \(from.displayName) to \(to.displayName)")
+			self.Logger.Log("Estimating distance from", "\(from.displayName) to \(to.displayName)")
             CoreApi.RoutingManager.requestEstimate(start: from,
                                                    destination: to,
                                                    routeOptions: routeOptions,
                                                    completion: { distTime in
                 if let distanceTime = distTime {
-                    print("Estimated distance is \(distanceTime.distanceInMeters) meter(s)")
-                    print("Estimated time is \(distanceTime.timeInMinutes) minute(s)")
+					self.Logger.Log("Estimated distance is", "\(distanceTime.distanceInMeters) meter(s)")
+					self.Logger.Log("Estimated time is", "\(distanceTime.timeInMinutes) minute(s)")
                 }
             })
         }
@@ -379,7 +385,7 @@ class MainViewController : UIViewController {
     fileprivate func allEntities(propertyId: Int) {
         let entities = CoreApi.PropertyManager.getSearchEntities(propertyId: propertyId)
         for entity in entities {
-            print("#Entity: \(entity.entityId) = \(entity.displayName)")
+            self.Logger.Log("#Entity:", "\(entity.entityId) = \(entity.displayName)")
         }
     }
     
@@ -387,7 +393,7 @@ class MainViewController : UIViewController {
     fileprivate func selectEntities(propertyId: Int) {
         let entities = CoreApi.PropertyManager.findEntityByName(name: "Apple", propertyId: propertyId)
         if let firstMatch = entities.first {
-            print("Selecting ... \(firstMatch.entityId) = \(firstMatch.displayName)")
+            self.Logger.Log("Selecting ... ", "\(firstMatch.entityId) = \(firstMatch.displayName)")
             MapstedMapApi.shared.selectEntity(entity: firstMatch)
         }
         /*
@@ -452,16 +458,17 @@ extension MainViewController : CoreInitCallback {
     func onSuccess() {
         //Once the Map API Setup is complete, Setup the Mapview
         DispatchQueue.main.async {
+			self.Logger.Log("onSuccess", "")
             self.addMapView()
         }
     }
     
     func onFailure(errorCode: EnumSdkError) {
-        print("Failed with \(errorCode)")
+		self.Logger.Log("Failed with", errorCode)
     }
     
     func onStatusUpdate(update: EnumSdkUpdate) {
-        print("OnStatusUpdate: \(update)")
+		self.Logger.Log("OnStatusUpdate", update)
     }
     
     func onStatusMessage(messageType: StatusMessageType) {
@@ -484,7 +491,7 @@ extension MainViewController: RoutingRequestCallback {
 
 extension MainViewController: GeofenceEventListener {
     func onGeofenceEvent(propertyId: Int, triggerId: String) {
-        print("Go GeofenceEvent for \(propertyId) with Trigger: \(triggerId)")
+        self.Logger.Log("Go GeofenceEvent for", "\(propertyId) with Trigger: \(triggerId)")
     }
 }
 
