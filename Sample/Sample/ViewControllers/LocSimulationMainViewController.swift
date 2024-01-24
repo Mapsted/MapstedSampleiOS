@@ -12,6 +12,7 @@ import MapstedMap
 import MapstedMapUi
 import LocationMarketing
 import MapKit
+import MapstedGeofence
 
 enum SimulatorPath {
     case LevelOne_ToFido
@@ -32,6 +33,8 @@ class LocSimulationMainViewController : UIViewController {
     
     private var simulatorPath: SimulatorPath = .LevelOne_LevelTwo_ToFootLocker
     private var simulatorWalkSpeedModifier: Float = 2.0
+    
+    var arrGeoTriggers: [GeofenceTrigger] = []
 
     //MARK: - Segue Handler
     
@@ -130,6 +133,7 @@ class LocSimulationMainViewController : UIViewController {
             let firstProperty = propertyInfos[0]
             self.displayProperty(propertyInfo: firstProperty) {
                 print("Property is displayed")
+                self.addGeoFenceTriggers()
             }
         }
         else {
@@ -245,4 +249,103 @@ extension LocSimulationMainViewController : MNAlertDelegate {
     func loadingAlerts() -> Bool {
         return false
     }
+}
+
+extension LocSimulationMainViewController {
+    func addGeoFenceTriggers() {
+        
+        let propertyId = 504
+        let buildingId = 504
+        let entityId = 414 // Foot Locker
+        let floorId = 941 //L1
+        let delaySecond: Float = 5.0
+        
+        MapstedGeofence.GeofenceManager.shared.addListener(geofenceCallback: self)
+
+        //Entity Entry Exit Trigger - for Foot Locker
+        let addEntityEntryTrigger = GeoFenceUtility.shared.createGeofenceForEntity(propertyId: propertyId, entityId: entityId, buildingId: buildingId, floorId: 942, geofenceId: "Trigger-Entity-Entry-\(entityId)", delaySecond: delaySecond, direction: .On_Enter)
+        let addEntityExitTrigger = GeoFenceUtility.shared.createGeofenceForEntity(propertyId: propertyId, entityId: entityId, buildingId: buildingId, floorId: 942, geofenceId: "Trigger-Entity-Exit-\(entityId)", delaySecond: delaySecond, direction: .On_Exit)
+
+        //Property Entry Exit Trigger - for Square one
+        let addPropertyEntryTrigger = GeoFenceUtility.shared.createGeofenceForProperty(propertyId: propertyId, geofenceId: "Trigger-Property-Entry-\(propertyId)", delaySecond: delaySecond, direction: .On_Enter)
+        let addPropertyExitTrigger = GeoFenceUtility.shared.createGeofenceForProperty(propertyId: propertyId, geofenceId: "Trigger-Property-Exit-\(propertyId)", delaySecond: delaySecond, direction: .On_Exit)
+
+        //Building Entry Exit Trigger - for Square one
+        let addBuildingEntryTrigger = GeoFenceUtility.shared.createGeofenceForBuilding(propertyId: propertyId, buildingId: buildingId, geofenceId: "Trigger-Building-Entry-\(buildingId)", delaySecond: delaySecond, direction: .On_Enter)
+        let addBuildingExitTrigger = GeoFenceUtility.shared.createGeofenceForBuilding(propertyId: propertyId, buildingId: buildingId, geofenceId: "Trigger-Building-Exit-\(buildingId)", delaySecond: delaySecond, direction: .On_Exit)
+
+        //Floor Entry Exit Trigger - Floor L1
+        let addFloorEntryTrigger = GeoFenceUtility.shared.createGeofenceForFloor(propertyId: propertyId, floorId: floorId, geofenceId: "Trigger-Floor-Entry-\(floorId)", delaySecond: delaySecond, direction: .On_Enter)
+        let addFloorExitTrigger = GeoFenceUtility.shared.createGeofenceForFloor(propertyId: propertyId, floorId: floorId, geofenceId: "Trigger-Floor-Exit-\(floorId)", delaySecond: delaySecond, direction: .On_Exit)
+
+        self.arrGeoTriggers = [addEntityEntryTrigger, addEntityExitTrigger, addPropertyEntryTrigger, addPropertyExitTrigger, addBuildingEntryTrigger, addBuildingExitTrigger, addFloorEntryTrigger, addFloorExitTrigger]
+        
+        let _ = MapstedGeofence.GeofenceManager.shared.addGeofenceTriggers(propertyId: propertyId, geofenceTriggers: self.arrGeoTriggers)
+    }
+    
+    func removeGeofenceTrigger(propertyId: Int, geofenceId: String) -> Bool {
+        return MapstedGeofence.GeofenceManager.shared.removeGeofenceTrigger(propertyId: propertyId, geofenceId: geofenceId)
+    }
+    
+    func removeAllGeofenceTriggers(propertyId: Int) -> Bool {
+        return MapstedGeofence.GeofenceManager.shared.removeAllGeofenceTriggers(propertyId: propertyId)
+    }
+    
+    func handleGeofence(propertyId: Int, geofenceId: String) {
+        DispatchQueue.main.async {
+            var alertTitle: String? = ""
+            var alertMessage: String? = ""
+            switch geofenceId {
+            case "Trigger-Entity-Entry-414": 
+                alertTitle = "Entity Entry alert"
+                alertMessage = "You are entering Foot Locker at Square One Shopping Centre."
+                break
+            case "Trigger-Entity-Exit-414":
+                alertTitle = "Entity Exit Alert"
+                alertMessage = "You just exited Foot Locker at Square One Shopping Centre."
+                break
+            case "Trigger-Property-Entry-504":
+                alertTitle = "Property Entry alert"
+                alertMessage = "You are entering the Square One Shopping Centre property."
+                break
+            case "Trigger-Property-Exit-504":
+                alertTitle = "Property Exit alert"
+                alertMessage = "You just exited the Square One Shopping Centre property."
+                break
+            case "Trigger-Building-Entry-504":
+                alertTitle = "Building Entry alert"
+                alertMessage = "You are entering the Square One Shopping Centre building."
+                break
+            case "Trigger-Building-Exit-504":
+                alertTitle = "Building Exit alert"
+                alertMessage = "You just exited the Square One Shopping Centre building."
+                break
+            case "Trigger-Floor-Entry-941":
+                alertTitle = "Floor Entry alert"
+                alertMessage = "You are entering the Floor - L1 on Square One Shopping Centre."
+                break
+            case "Trigger-Floor-Exit-941":
+                alertTitle = "Floor Exit alert"
+                alertMessage = "You just exited the Floor - L1 on Square One Shopping Centre."
+                break
+            default:
+                break
+            }
+            
+            let alertView = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+            alertView.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+
+            self.present(alertView, animated: true, completion: nil)
+        }
+    }
+}
+
+
+
+extension LocSimulationMainViewController : GeofenceCallback {
+    func onGeofenceTriggered(propertyId: Int, geofenceId: String) {
+        self.handleGeofence(propertyId: propertyId, geofenceId: geofenceId)
+    }
+    
+    
 }

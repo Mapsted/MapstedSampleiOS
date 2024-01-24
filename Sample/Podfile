@@ -8,12 +8,15 @@ use_frameworks!
 
 target 'Sample' do
   pod 'mapsted-sdk-map-ui', '~> 5.0'
+  pod 'mapsted-sdk-geofence', '~> 5.0'
 end
 
 target 'Sample_MapOnly' do
   pod 'mapsted-sdk-map', '~> 5.0'
+pod 'mapsted-sdk-geofence', '~> 5.0'
 end
 
 target 'Sample_LocSimulation' do
   pod 'mapsted-sdk-map-ui', '~> 5.0'
+  pod 'mapsted-sdk-geofence', '~> 5.0'
 end

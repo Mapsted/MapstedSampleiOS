@@ -176,7 +176,56 @@ extension MapViewController : PropertyDownloadListener {
 	func onProgress(propertyId: Int, percentage: Float) {
 		print("Downloaded \(percentage * 100)% of \(propertyId)")
 	}
-	
-	
-	
+}
+
+extension MapViewController: MNMapVectorElementListenerDelegate {
+    func onPolygonTapped(polygon: MNMapPolygon, tapType: MapstedMap.MapstedMapApi.TapType, tapPos: MNMercator) {
+    }
+    
+    func onEntityTapped(entity: MNMapEntity, tapType: MapstedMap.MapstedMapApi.TapType, tapPos: MNMercator) {
+        print("onEntityTapped: \(entity.name) - entityId: \(entity.entityId())")
+        MapstedMapApi.shared.selectSearchEntity(entity: entity, showPopup: false)
+    }
+    
+    func onBalloonClicked(searchEntity: MNSearchEntity) {
+    }
+    
+    func onMarkerTapped(markerName: String, markerType: String) {
+    }
+}
+
+extension MapViewController: MNMapVectorTileEventListenerDelegate {
+    public func onTileBalloonClicked(searchEntity: MNSearchEntity) {
+        self.onBalloonClicked(searchEntity: searchEntity)
+    }
+    
+    public func onTileMarkerTapped(markerName: String, markerType: String) {
+        self.onMarkerTapped(markerName: markerName, markerType: markerType)
+    }
+
+    public func onTileEntityTapped(entity: MNMapEntity, tapType: MapstedMapApi.TapType, tapPos: MNMercator) {
+        self.onEntityTapped(entity: entity, tapType: tapType, tapPos: tapPos)
+    }
+    
+    public func onTilePolygonTapped(polygon: MNMapPolygon, tapType: MapstedMapApi.TapType, tapPos: MNMercator) {
+        self.onPolygonTapped(polygon: polygon, tapType: tapType, tapPos: tapPos)
+    }
+}
+
+
+extension MapViewController: MNMapListenerDelegate {
+    func onMapMoved() {
+    }
+    
+    func onMapStable() {
+    }
+    
+    func onMapIdle() {
+    }
+    
+    func onMapInteraction() {
+    }
+    
+    func outsideBuildingTapped(tapPos: MNMercator, tapType: MapstedMap.MapstedMapApi.TapType) {
+    }
 }
