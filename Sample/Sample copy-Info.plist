@@ -41,6 +41,8 @@
 	<string>Use for indoor navigation purpose</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Use for indoor navigation purpose</string>
+	<key>NSMotionUsageDescription</key>
+	<string>This app require the Barometer data.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Use for store sign detection</string>
 	<key>UIAppFonts</key>

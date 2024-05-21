@@ -4,19 +4,20 @@ platform :ios, '13.0'
 source 'https://cdn.cocoapods.org/'
 source 'https://github.com/Mapsted/podspec.git'
 
+
 use_frameworks!
 
 target 'Sample' do
-  pod 'mapsted-sdk-map-ui', '~> 5.0'
-  pod 'mapsted-sdk-geofence', '~> 5.0'
+  pod 'mapsted-sdk-map-ui', '~> 5.3.15'
+  pod 'mapsted-sdk-geofence', '~> 5.3.15'
 end
 
 target 'Sample_MapOnly' do
-  pod 'mapsted-sdk-map', '~> 5.0'
-pod 'mapsted-sdk-geofence', '~> 5.0'
+  pod 'mapsted-sdk-map', '~> 5.3.15'
+pod 'mapsted-sdk-geofence', '~> 5.3.15'
 end
 
 target 'Sample_LocSimulation' do
-  pod 'mapsted-sdk-map-ui', '~> 5.0'
-  pod 'mapsted-sdk-geofence', '~> 5.0'
+  pod 'mapsted-sdk-map-ui', '~> 5.3.15'
+  pod 'mapsted-sdk-geofence', '~> 5.3.15'
 end
