@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../ios-mall-mapp/Gpx/SquareOne_InsideMall.gpx">
+   </FileRef>
+   <FileRef
+      location = "group:../../ios-mall-mapp/Gpx/SquareOne.gpx">
+   </FileRef>
+   <FileRef
       location = "group:Sample.xcodeproj">
    </FileRef>
    <FileRef
